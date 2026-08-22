@@ -227,6 +227,18 @@
     color:#fff; font-size:13px; text-align:center; margin-top:12px; min-height:18px;
     max-width:480px;
   }
+  .lightbox-dots{
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    margin-top:14px;
+  }
+  .lightbox-dots button{
+    width:6px; height:6px; border-radius:50%; padding:0;
+    background:rgba(255,255,255,0.35); border:none; cursor:pointer;
+  }
+  .lightbox-dots button.active{background:#fff; width:16px; border-radius:4px;}
+  .lightbox-hint{
+    color:rgba(255,255,255,0.65); font-size:11.5px; text-align:center; margin-top:6px;
+  }
 
   /* ---------- Info ---------- */
   .info-card{
@@ -399,6 +411,8 @@
       <button class="lightbox-nav-btn next" id="lightbox-next" aria-label="Seterus">&#8250;</button>
     </div>
     <p class="lightbox-caption" id="lightbox-caption"></p>
+    <div class="lightbox-dots" id="lightbox-dots"></div>
+    <p class="lightbox-hint" id="lightbox-hint">Leret gambar untuk lihat yang lain</p>
   </div>
 
   <!-- INFO -->
@@ -710,7 +724,28 @@
     document.getElementById('lightbox-img').src = driveLinkToDirect(photo.link);
     document.getElementById('lightbox-caption').textContent = photo.caption || '';
     document.getElementById('lightbox-title').textContent = lb.game + ' · ' + (lb.index + 1) + '/' + lb.photos.length;
+
+    var dotsEl = document.getElementById('lightbox-dots');
+    var hintEl = document.getElementById('lightbox-hint');
+    if(lb.photos.length > 1){
+      var dotsHtml = '';
+      lb.photos.forEach(function(_, i){
+        dotsHtml += '<button type="button" class="' + (i === lb.index ? 'active' : '') + '" onclick="lbGoTo(' + i + ')" aria-label="Gambar ' + (i + 1) + '"></button>';
+      });
+      dotsEl.innerHTML = dotsHtml;
+      dotsEl.style.display = 'flex';
+      hintEl.style.display = 'block';
+    } else {
+      dotsEl.style.display = 'none';
+      hintEl.style.display = 'none';
+    }
   }
+
+  function lbGoTo(i){
+    lb.index = i;
+    lbRender();
+  }
+  window.lbGoTo = lbGoTo;
 
   function openLightbox(game){
     lb.photos = galleryGroups[game] || [];
