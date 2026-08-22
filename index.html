@@ -104,28 +104,57 @@
     padding:10px 0 4px;
   }
 
-  /* ---------- Schedule ---------- */
-  .event{
-    display:flex; gap:12px;
+  /* ---------- Schedule (game cards) ---------- */
+  .game-card{
     background:var(--paper);
     border-radius:10px;
-    padding:12px 14px;
-    margin-bottom:8px;
+    padding:14px 16px;
+    margin-bottom:10px;
     border:1px solid var(--line);
   }
-  .event-time{
-    font-family:'JetBrains Mono', monospace; font-size:12.5px; font-weight:700;
-    color:var(--ink); min-width:52px; padding-top:1px;
+  .game-head{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .game-no{
+    width:24px; height:24px; border-radius:50%;
+    background:var(--charcoal); color:var(--cream);
+    font-family:'Oswald', sans-serif; font-size:12px; font-weight:600;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
   }
-  .event-body{flex:1;}
-  .event-name{font-size:14px; font-weight:600; margin-bottom:3px;}
-  .badge{
-    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:0.03em;
-    padding:2px 8px; border-radius:20px; text-transform:uppercase;
+  .game-name{font-size:15px; font-weight:600; flex:1; min-width:0;}
+  .game-date{
+    display:inline-flex; align-items:center; gap:4px;
+    font-family:'JetBrains Mono', monospace; font-size:11.5px; font-weight:600;
+    color:var(--coral-ink); background:rgba(255,90,60,0.1);
+    padding:3px 9px; border-radius:20px; flex-shrink:0;
   }
-  .badge.done{background:#E7F3EA; color:var(--success);}
-  .badge.live{background:rgba(255,90,60,0.12); color:var(--coral-ink);}
-  .badge.upcoming{background:#EFEDE5; color:var(--muted);}
+  .game-details{border-top:1px solid var(--line); padding-top:10px; display:flex; flex-direction:column; gap:7px;}
+  .detail-row{display:flex; gap:10px; font-size:12.5px; line-height:1.5;}
+  .detail-row .label{color:var(--muted); min-width:78px; flex-shrink:0;}
+  .detail-row .value{color:var(--ink); font-weight:500;}
+  .detail-row .value a{color:var(--coral-ink); font-weight:600; text-decoration:none;}
+  .detail-row .value a:hover{text-decoration:underline;}
+  .result-pending{color:var(--muted); font-style:italic;}
+
+  .result-btn{
+    border:1px solid var(--border-strong, var(--line)); background:var(--paper);
+    color:var(--coral-ink); font-size:12px; font-weight:600;
+    padding:3px 10px; border-radius:20px; cursor:pointer;
+    font-family:'Inter', sans-serif;
+  }
+  .result-btn:active{transform:scale(0.97);}
+  .result-panel{
+    margin-top:10px; padding-top:10px; border-top:1px solid var(--line);
+    display:none;
+  }
+  .result-panel.open{display:block;}
+  .result-panel table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  .result-panel th{
+    text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.03em;
+    color:var(--muted); font-weight:600; padding:4px 6px; border-bottom:1px solid var(--line);
+  }
+  .result-panel td{padding:6px 6px; border-bottom:1px solid var(--line); color:var(--ink);}
+  .result-panel tr:last-child td{border-bottom:none;}
+  .result-note{font-size:12.5px; color:var(--muted); font-style:italic; text-align:center; padding:6px 0;}
 
   /* ---------- Gallery ---------- */
   .gallery-grid{
@@ -137,6 +166,8 @@
     padding:10px;
     color:#fff; font-size:11.5px; font-weight:600;
     position:relative; overflow:hidden;
+    background-size:cover; background-position:center;
+    background-color:var(--surface-1, #EFEDE5);
   }
   .gallery-tile::before{content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.45) 100%);}
   .gallery-tile span{position:relative;}
@@ -211,48 +242,91 @@
   <!-- JADUAL -->
   <section class="panel" id="schedule">
     <div class="section-head">
-      <h2>Jadual acara</h2>
-      <span>Hari 1</span>
+      <h2>Jadual program</h2>
+      <span>Ogos – Dis 2026</span>
     </div>
 
-    <div class="event">
-      <div class="event-time">9:00</div>
-      <div class="event-body">
-        <p class="event-name">Perarakan &amp; taklimat</p>
-        <span class="badge done">Selesai</span>
+    <div class="game-card">
+      <div class="game-head">
+        <div class="game-no">1</div>
+        <p class="game-name">Volleyball</p>
+        <span class="game-date">22 Ogos</span>
       </div>
+      <div class="game-details">
+        <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Team – Male · Team Combine – Female</span></div>
+        <div class="detail-row"><span class="label">Format</span><span class="value">2 Group team League</span></div>
+        <div class="detail-row"><span class="label">Hadiah</span><span class="value">Team</span></div>
+        <div class="detail-row"><span class="label">Venue</span><span class="value">Yayasan Sabah</span></div>
+        <div class="detail-row"><span class="label">Urusetia</span><span class="value">Shahrul</span></div>
+        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="toggleResults(78222840, 'panel-1', this)">Lihat keputusan</button></span></div>
+      </div>
+      <div class="result-panel" id="panel-1"></div>
     </div>
 
-    <div class="event">
-      <div class="event-time">10:00</div>
-      <div class="event-body">
-        <p class="event-name">Lari berpasangan</p>
-        <span class="badge done">Selesai</span>
+    <div class="game-card">
+      <div class="game-head">
+        <div class="game-no">2</div>
+        <p class="game-name">Badminton</p>
+        <span class="game-date">19 Sep</span>
       </div>
+      <div class="game-details">
+        <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Men Double – Open · Mix Double · Double-open (+Exec)</span></div>
+        <div class="detail-row"><span class="label">Format</span><span class="value">Individual League</span></div>
+        <div class="detail-row"><span class="label">Venue</span><span class="value">Yayasan Sabah</span></div>
+        <div class="detail-row"><span class="label">Urusetia</span><span class="value">Harny &amp; Polleyus</span></div>
+        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="toggleResults(1463019914, 'panel-2', this)">Lihat keputusan</button></span></div>
+      </div>
+      <div class="result-panel" id="panel-2"></div>
     </div>
 
-    <div class="event">
-      <div class="event-time">2:00</div>
-      <div class="event-body">
-        <p class="event-name">Bola dalam bakul</p>
-        <span class="badge live">Sedang berlangsung</span>
+    <div class="game-card">
+      <div class="game-head">
+        <div class="game-no">3</div>
+        <p class="game-name">Futsal &amp; Netball</p>
+        <span class="game-date">10 Okt</span>
       </div>
+      <div class="game-details">
+        <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Futsal: Team – Male · Netball: Team Combine – Female</span></div>
+        <div class="detail-row"><span class="label">Format</span><span class="value">2 Group team League – Final 1 vs 2 &amp; 2 vs 1 · 1 Game mix team</span></div>
+        <div class="detail-row"><span class="label">Hadiah</span><span class="value">Team · Top Scorer · Team</span></div>
+        <div class="detail-row"><span class="label">Venue</span><span class="value">Yayasan Sabah</span></div>
+        <div class="detail-row"><span class="label">Urusetia</span><span class="value">Aidi &amp; Mierul</span></div>
+        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="toggleResults(1372197371, 'panel-3', this)">Lihat keputusan</button></span></div>
+      </div>
+      <div class="result-panel" id="panel-3"></div>
     </div>
 
-    <div class="event">
-      <div class="event-time">3:30</div>
-      <div class="event-body">
-        <p class="event-name">Tarik tali</p>
-        <span class="badge upcoming">Akan datang</span>
+    <div class="game-card">
+      <div class="game-head">
+        <div class="game-no">4</div>
+        <p class="game-name">Bowling</p>
+        <span class="game-date">20 Nov</span>
       </div>
+      <div class="game-details">
+        <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Team</span></div>
+        <div class="detail-row"><span class="label">Format</span><span class="value">3 Games rolloff – 4+1 highest score for Team</span></div>
+        <div class="detail-row"><span class="label">Hadiah</span><span class="value">Team · High series Male · High series Female · High Game Male · High Game Female</span></div>
+        <div class="detail-row"><span class="label">Venue</span><span class="value">1B MyBowl</span></div>
+        <div class="detail-row"><span class="label">Urusetia</span><span class="value">S. Affandi</span></div>
+        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="toggleResults(1879191342, 'panel-4', this)">Lihat keputusan</button></span></div>
+      </div>
+      <div class="result-panel" id="panel-4"></div>
     </div>
 
-    <div class="event">
-      <div class="event-time">5:00</div>
-      <div class="event-body">
-        <p class="event-name">Perlawanan akhir &amp; anugerah</p>
-        <span class="badge upcoming">Akan datang</span>
+    <div class="game-card">
+      <div class="game-head">
+        <div class="game-no">5</div>
+        <p class="game-name">Pickleball</p>
+        <span class="game-date">12 Dis</span>
       </div>
+      <div class="game-details">
+        <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Double – Male (2 wakil) · Double – Female (1 wakil) · Mix Double (1 wakil)</span></div>
+        <div class="detail-row"><span class="label">Format</span><span class="value">Individual League</span></div>
+        <div class="detail-row"><span class="label">Venue</span><span class="value">Bounce Pickleball</span></div>
+        <div class="detail-row"><span class="label">Urusetia</span><span class="value">Haljimi</span></div>
+        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="toggleResults(1371103488, 'panel-5', this)">Lihat keputusan</button></span></div>
+      </div>
+      <div class="result-panel" id="panel-5"></div>
     </div>
   </section>
 
@@ -260,9 +334,9 @@
   <section class="panel" id="gallery">
     <div class="section-head">
       <h2>Galeri acara</h2>
-      <span>0 gambar</span>
+      <span id="gallery-count">0 gambar</span>
     </div>
-    <div class="gallery-grid">
+    <div class="gallery-grid" id="gallery-grid">
       <div class="gallery-empty">
         Belum ada gambar dimuat naik.<br>Gambar acara akan dipaparkan di sini semasa hari acara.
       </div>
@@ -433,6 +507,136 @@
 
   loadStandings();
   setInterval(loadStandings, REFRESH_MS);
+
+  // ---------- Per-game results panel (inline, styled — not raw Sheets UI) ----------
+  var resultCache = {};
+
+  function escapeHtmlGeneric(str){
+    var d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function renderResultTable(panelEl, table){
+    var cols = table.cols.map(function(c){ return c.label || ''; });
+    var rows = table.rows.filter(function(r){
+      return r.c.some(function(cell){ return cell && cell.v !== null && cell.v !== undefined && String(cell.v).trim() !== ''; });
+    });
+
+    if(!rows.length){
+      panelEl.innerHTML = '<p class="result-note">Keputusan belum tersedia lagi.</p>';
+      return;
+    }
+
+    var hasHeaders = cols.some(function(c){ return c && c.trim() !== ''; });
+
+    var html = '<table><thead><tr>';
+    if(hasHeaders){
+      cols.forEach(function(c){ html += '<th>' + escapeHtmlGeneric(c) + '</th>'; });
+    }
+    html += '</tr></thead><tbody>';
+    rows.forEach(function(r){
+      html += '<tr>';
+      r.c.forEach(function(cell){
+        var v = cell && cell.v !== null && cell.v !== undefined ? cell.v : '';
+        html += '<td>' + escapeHtmlGeneric(String(v)) + '</td>';
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    panelEl.innerHTML = html;
+  }
+
+  function toggleResults(gid, panelId, btn){
+    var panel = document.getElementById(panelId);
+    var isOpen = panel.classList.contains('open');
+
+    if(isOpen){
+      panel.classList.remove('open');
+      btn.textContent = 'Lihat keputusan';
+      return;
+    }
+
+    panel.classList.add('open');
+    btn.textContent = 'Sembunyi keputusan';
+
+    if(resultCache[gid]){
+      renderResultTable(panel, resultCache[gid]);
+      return;
+    }
+
+    panel.innerHTML = '<p class="result-note">Memuatkan…</p>';
+
+    var callbackName = 'gvizResult_' + gid;
+    window[callbackName] = function(resp){
+      resultCache[gid] = resp.table;
+      renderResultTable(panel, resp.table);
+      delete window[callbackName];
+    };
+
+    var script = document.createElement('script');
+    script.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
+      '/gviz/tq?gid=' + gid + '&tqx=out:json;responseHandler:' + callbackName + '&_=' + Date.now();
+    script.onerror = function(){
+      panel.innerHTML = '<p class="result-note">Tak dapat tarik keputusan. Cuba lagi.</p>';
+    };
+    document.body.appendChild(script);
+  }
+  window.toggleResults = toggleResults;
+
+  // ---------- Gallery (auto-pull from Gallery sheet tab, converts Drive share links to direct images) ----------
+  var GALLERY_GID = '415481268';
+
+  function driveLinkToDirect(url){
+    if(!url) return url;
+    var m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if(m && m[1]){
+      return 'https://lh3.googleusercontent.com/d/' + m[1] + '=w600';
+    }
+    return url;
+  }
+
+  function renderGallery(photos){
+    var grid = document.getElementById('gallery-grid');
+    document.getElementById('gallery-count').textContent = photos.length + ' gambar';
+
+    if(!photos.length){
+      grid.innerHTML = '<div class="gallery-empty">Belum ada gambar dimuat naik.<br>Gambar acara akan dipaparkan di sini semasa hari acara.</div>';
+      return;
+    }
+
+    var html = '';
+    photos.forEach(function(p){
+      var src = driveLinkToDirect(p.link);
+      html += '<div class="gallery-tile" style="background-image:url(\'' + src.replace(/'/g, "%27") + '\');">';
+      if(p.caption) html += '<span>' + escapeHtmlGeneric(p.caption) + '</span>';
+      html += '</div>';
+    });
+    grid.innerHTML = html;
+  }
+
+  function loadGallery(){
+    if(!GALLERY_GID) return;
+    var callbackName = 'gvizGallery';
+    window[callbackName] = function(resp){
+      var rows = resp.table.rows.filter(function(r){
+        return r.c[0] && r.c[0].v;
+      });
+      var photos = rows.map(function(r){
+        return {
+          link: r.c[0] ? r.c[0].v : '',
+          caption: r.c[1] ? r.c[1].v : ''
+        };
+      });
+      renderGallery(photos);
+    };
+    var script = document.createElement('script');
+    script.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
+      '/gviz/tq?gid=' + GALLERY_GID + '&tqx=out:json;responseHandler:' + callbackName + '&_=' + Date.now();
+    document.body.appendChild(script);
+  }
+
+  loadGallery();
 </script>
 
 </body>
