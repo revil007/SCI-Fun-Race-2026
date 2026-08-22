@@ -329,8 +329,9 @@
     btn.addEventListener('click', function(){ setTab(btn.dataset.tab); });
   });
 
-  // ---------- Live leaderboard from Google Sheet (published CSV) ----------
-  var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRSA-tXPYyS2eBQravcb8OTCng3D8aDFuLkYwXDWOcy0xrq5bO-i3AarPvu1E75A3x4Thyhzr8lMQjD/pub?gid=0&single=true&output=csv';
+  // ---------- Live leaderboard from Google Sheet (JSONP — works from file:// and https://) ----------
+  var SHEET_ID = '18vfMAhWIEKJQIW8XXp0Inbhnt-8gvWG3IuqyR8oSPa4';
+  var SHEET_GID = '0';
   var REFRESH_MS = 60000;
 
   var TEAM_META = {
@@ -341,12 +342,6 @@
     'Pink Storm':     { color:'#C94F82', group:'Kumpulan 5 · Pink & Black' },
     'Diamond X':      { color:'#8FA6C4', group:'Kumpulan 6 · White + Blue' }
   };
-
-  function parseCsv(text){
-    return text.trim().split('\n').map(function(line){
-      return line.split(',').map(function(cell){ return cell.trim(); });
-    });
-  }
 
   function escapeHtml(str){
     var d = document.createElement('div');
@@ -383,46 +378,57 @@
     lanesEl.innerHTML = html;
   }
 
-  function loadStandings(){
-    fetch(SHEET_CSV_URL, { cache: 'no-store' })
-      .then(function(res){
-        if(!res.ok) throw new Error('Fetch gagal: ' + res.status);
-        return res.text();
-      })
-      .then(function(text){
-        var rows = parseCsv(text);
-        var header = rows[0];
-        var teamNames = header.slice(1);
-
-        var scoreRow = rows.find(function(r){
-          return (r[0] || '').toUpperCase().indexOf('SCORE') !== -1;
-        });
-        if(!scoreRow) throw new Error('Baris SCORE/POINTS tidak dijumpai');
-
-        var standings = teamNames.map(function(name, i){
-          var raw = scoreRow[i + 1];
-          var pts = parseFloat(raw);
-          return { name: name, points: isNaN(pts) ? null : pts };
-        }).filter(function(t){ return t.name; });
-
-        // teams with a real score come first (highest first), unscored teams keep sheet order after
-        standings.sort(function(a, b){
-          if(a.points === null && b.points === null) return 0;
-          if(a.points === null) return 1;
-          if(b.points === null) return -1;
-          return b.points - a.points;
-        });
-
-        renderLanes(standings);
-        var now = new Date();
-        document.getElementById('updated-note').textContent =
-          'Dikemaskini ' + now.toLocaleTimeString('ms-MY', { hour:'2-digit', minute:'2-digit' }) + ' · auto-refresh setiap 60 saat';
-      })
-      .catch(function(err){
-        document.getElementById('lanes').innerHTML =
-          '<p class="updated-note">Tak dapat tarik data terkini. Cuba refresh halaman ini.</p>';
-        console.error(err);
+  function handleGvizResponse(resp){
+    try{
+      var rows = resp.table.rows.map(function(r){
+        return r.c.map(function(cell){ return cell && cell.v !== null && cell.v !== undefined ? String(cell.v) : ''; });
       });
+
+      var header = rows[0];
+      var teamNames = header.slice(1);
+
+      var scoreRow = rows.find(function(r){
+        return (r[0] || '').toUpperCase().indexOf('SCORE') !== -1;
+      });
+      if(!scoreRow) throw new Error('Baris SCORE/POINTS tidak dijumpai');
+
+      var standings = teamNames.map(function(name, i){
+        var raw = scoreRow[i + 1];
+        var pts = parseFloat(raw);
+        return { name: name, points: isNaN(pts) ? null : pts };
+      }).filter(function(t){ return t.name; });
+
+      standings.sort(function(a, b){
+        if(a.points === null && b.points === null) return 0;
+        if(a.points === null) return 1;
+        if(b.points === null) return -1;
+        return b.points - a.points;
+      });
+
+      renderLanes(standings);
+      var now = new Date();
+      document.getElementById('updated-note').textContent =
+        'Dikemaskini ' + now.toLocaleTimeString('ms-MY', { hour:'2-digit', minute:'2-digit' }) + ' · auto-refresh setiap 60 saat';
+    }catch(err){
+      document.getElementById('lanes').innerHTML =
+        '<p class="updated-note">Tak dapat tarik data terkini. Cuba refresh halaman ini.</p>';
+      console.error(err);
+    }
+  }
+  window.handleGvizResponse = handleGvizResponse;
+
+  function loadStandings(){
+    var old = document.getElementById('gviz-script');
+    if(old) old.remove();
+    var script = document.createElement('script');
+    script.id = 'gviz-script';
+    script.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
+      '/gviz/tq?gid=' + SHEET_GID + '&headers=0&tqx=out:json;responseHandler:handleGvizResponse&_=' + Date.now();
+    script.onerror = function(){
+      document.getElementById('lanes').innerHTML =
+        '<p class="updated-note">Tak dapat tarik data terkini. Cuba refresh halaman ini.</p>';
+    };
+    document.body.appendChild(script);
   }
 
   loadStandings();
