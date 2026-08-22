@@ -454,14 +454,13 @@
 
   function handleGvizResponse(resp){
     try{
-      var rows = resp.table.rows.map(function(r){
+      var teamNames = resp.table.cols.slice(1).map(function(c){ return c.label || ''; });
+
+      var dataRows = resp.table.rows.map(function(r){
         return r.c.map(function(cell){ return cell && cell.v !== null && cell.v !== undefined ? String(cell.v) : ''; });
       });
 
-      var header = rows[0];
-      var teamNames = header.slice(1);
-
-      var scoreRow = rows.find(function(r){
+      var scoreRow = dataRows.find(function(r){
         return (r[0] || '').toUpperCase().indexOf('SCORE') !== -1;
       });
       if(!scoreRow) throw new Error('Baris SCORE/POINTS tidak dijumpai');
@@ -497,7 +496,7 @@
     var script = document.createElement('script');
     script.id = 'gviz-script';
     script.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
-      '/gviz/tq?gid=' + SHEET_GID + '&headers=0&tqx=out:json;responseHandler:handleGvizResponse&_=' + Date.now();
+      '/gviz/tq?gid=' + SHEET_GID + '&headers=1&tqx=out:json;responseHandler:handleGvizResponse&_=' + Date.now();
     script.onerror = function(){
       document.getElementById('lanes').innerHTML =
         '<p class="updated-note">Tak dapat tarik data terkini. Cuba refresh halaman ini.</p>';
