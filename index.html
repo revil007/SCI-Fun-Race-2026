@@ -174,18 +174,39 @@
   }
   .result-panel.open{display:block;}
   .result-scroll{width:100%; max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;}
-  .result-panel table{width:100%; min-width:100%; border-collapse:collapse; font-size:12px; table-layout:auto;}
-  .result-panel th{
+  .result-panel table, .results-modal-body table{width:100%; min-width:100%; border-collapse:collapse; font-size:12.5px; table-layout:auto;}
+  .result-panel th, .results-modal-body th{
     text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:0.02em;
-    color:var(--muted); font-weight:600; padding:4px 6px; border-bottom:1px solid var(--line);
+    color:var(--muted); font-weight:600; padding:5px 6px; border-bottom:1px solid var(--line);
     white-space:nowrap;
   }
-  .result-panel td{
-    padding:6px 6px; border-bottom:1px solid var(--line); color:var(--ink);
+  .result-panel td, .results-modal-body td{
+    padding:7px 6px; border-bottom:1px solid var(--line); color:var(--ink);
     word-break:break-word; max-width:140px;
   }
-  .result-panel tr:last-child td{border-bottom:none;}
+  .result-panel tr:last-child td, .results-modal-body tr:last-child td{border-bottom:none;}
   .result-note{font-size:12.5px; color:var(--muted); font-style:italic; text-align:center; padding:6px 0;}
+
+  .results-modal{
+    position:fixed; inset:0; background:rgba(8,10,14,0.6);
+    display:none; align-items:center; justify-content:center;
+    z-index:200; padding:20px 16px;
+  }
+  .results-modal.open{display:flex;}
+  .results-modal-card{
+    background:var(--paper); border-radius:12px; width:100%; max-width:460px;
+    max-height:78vh; display:flex; flex-direction:column; overflow:hidden;
+  }
+  .results-modal-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 16px; border-bottom:1px solid var(--line);
+    font-size:14px; font-weight:600; flex-shrink:0;
+  }
+  .results-modal-close{
+    background:none; border:none; font-size:22px; line-height:1;
+    color:var(--muted); cursor:pointer; padding:2px 6px;
+  }
+  .results-modal-body{padding:14px 16px; overflow-y:auto; flex:1; min-height:0;}
 
   /* ---------- Gallery ---------- */
   .gallery-grid{
@@ -288,6 +309,25 @@
   }
   .bottom-nav button.active{color:var(--coral);}
   .bottom-nav span{font-size:10.5px; font-weight:600;}
+
+  /* ---------- Install banner ---------- */
+  .install-banner{
+    display:none; align-items:center; gap:10px;
+    background:var(--charcoal); color:var(--cream);
+    padding:10px 14px; margin:0 16px 10px;
+    border-radius:10px; max-width:448px; margin-left:auto; margin-right:auto;
+  }
+  .install-banner.show{display:flex;}
+  .install-banner img{width:32px; height:32px; border-radius:7px; flex-shrink:0;}
+  .install-banner .txt{flex:1; min-width:0;}
+  .install-banner .txt strong{display:block; font-size:13px; font-weight:600;}
+  .install-banner .txt span{display:block; font-size:11.5px; color:#B9B6AA;}
+  .install-banner button{
+    font-family:'Inter', sans-serif; font-size:12.5px; font-weight:600;
+    border:none; border-radius:20px; padding:7px 14px; cursor:pointer; flex-shrink:0;
+  }
+  .install-banner .btn-install{background:var(--amber); color:var(--amber-ink);}
+  .install-banner .btn-dismiss{background:none; color:#B9B6AA; padding:7px 8px;}
 </style>
 </head>
 <body>
@@ -337,9 +377,8 @@
         <div class="detail-row"><span class="label">Hadiah</span><span class="value">Team</span></div>
         <div class="detail-row"><span class="label">Venue</span><span class="value">Yayasan Sabah</span></div>
         <div class="detail-row"><span class="label">Urusetia</span><span class="value">Shahrul</span></div>
-        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="toggleResults(78222840, 'panel-1', this)">Lihat keputusan</button></span></div>
+        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="openResultsModal(78222840, 'Volleyball')">Lihat keputusan</button></span></div>
       </div>
-      <div class="result-panel" id="panel-1"></div>
     </div>
 
     <div class="game-card" data-date="2026-09-19">
@@ -354,9 +393,8 @@
         <div class="detail-row"><span class="label">Format</span><span class="value">Individual League</span></div>
         <div class="detail-row"><span class="label">Venue</span><span class="value">Yayasan Sabah</span></div>
         <div class="detail-row"><span class="label">Urusetia</span><span class="value">Harny &amp; Polleyus</span></div>
-        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="toggleResults(1463019914, 'panel-2', this)">Lihat keputusan</button></span></div>
+        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="openResultsModal(1463019914, 'Badminton')">Lihat keputusan</button></span></div>
       </div>
-      <div class="result-panel" id="panel-2"></div>
     </div>
 
     <div class="game-card" data-date="2026-10-10">
@@ -372,9 +410,8 @@
         <div class="detail-row"><span class="label">Hadiah</span><span class="value">Team · Top Scorer · Team</span></div>
         <div class="detail-row"><span class="label">Venue</span><span class="value">Yayasan Sabah</span></div>
         <div class="detail-row"><span class="label">Urusetia</span><span class="value">Aidi &amp; Mierul</span></div>
-        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="toggleResults(1372197371, 'panel-3', this)">Lihat keputusan</button></span></div>
+        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="openResultsModal(1372197371, 'Futsal & Netball')">Lihat keputusan</button></span></div>
       </div>
-      <div class="result-panel" id="panel-3"></div>
     </div>
 
     <div class="game-card" data-date="2026-11-20">
@@ -390,9 +427,8 @@
         <div class="detail-row"><span class="label">Hadiah</span><span class="value">Team · High series Male · High series Female · High Game Male · High Game Female</span></div>
         <div class="detail-row"><span class="label">Venue</span><span class="value">1B MyBowl</span></div>
         <div class="detail-row"><span class="label">Urusetia</span><span class="value">S. Affandi</span></div>
-        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="toggleResults(1879191342, 'panel-4', this)">Lihat keputusan</button></span></div>
+        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="openResultsModal(1879191342, 'Bowling')">Lihat keputusan</button></span></div>
       </div>
-      <div class="result-panel" id="panel-4"></div>
     </div>
 
     <div class="game-card" data-date="2026-12-12">
@@ -407,9 +443,8 @@
         <div class="detail-row"><span class="label">Format</span><span class="value">Individual League</span></div>
         <div class="detail-row"><span class="label">Venue</span><span class="value">Bounce Pickleball</span></div>
         <div class="detail-row"><span class="label">Urusetia</span><span class="value">Haljimi</span></div>
-        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="toggleResults(1371103488, 'panel-5', this)">Lihat keputusan</button></span></div>
+        <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="openResultsModal(1371103488, 'Pickleball')">Lihat keputusan</button></span></div>
       </div>
-      <div class="result-panel" id="panel-5"></div>
     </div>
   </section>
 
@@ -437,6 +472,16 @@
     <p class="lightbox-hint" id="lightbox-hint">Leret gambar untuk lihat yang lain</p>
   </div>
 
+  <div class="results-modal" id="results-modal">
+    <div class="results-modal-card">
+      <div class="results-modal-head">
+        <span id="results-modal-title"></span>
+        <button class="results-modal-close" id="results-modal-close" aria-label="Tutup">&times;</button>
+      </div>
+      <div class="results-modal-body" id="results-modal-body"></div>
+    </div>
+  </div>
+
   <!-- INFO -->
   <section class="panel" id="info">
     <div class="info-card">
@@ -456,6 +501,16 @@
   </section>
 
 </main>
+
+<div class="install-banner" id="install-banner">
+  <img src="icon-192.png" alt="">
+  <div class="txt">
+    <strong>Pasang app ni di telefon</strong>
+    <span>Akses terus dari home screen, tanpa buka browser</span>
+  </div>
+  <button class="btn-install" id="install-btn">Pasang</button>
+  <button class="btn-dismiss" id="install-dismiss" aria-label="Tutup">&times;</button>
+</div>
 
 <nav class="bottom-nav">
   <button class="nav-btn active" data-tab="board">
@@ -642,30 +697,23 @@
     panelEl.innerHTML = html;
   }
 
-  function toggleResults(gid, panelId, btn){
-    var panel = document.getElementById(panelId);
-    var isOpen = panel.classList.contains('open');
-
-    if(isOpen){
-      panel.classList.remove('open');
-      btn.textContent = 'Lihat keputusan';
-      return;
-    }
-
-    panel.classList.add('open');
-    btn.textContent = 'Sembunyi keputusan';
+  function openResultsModal(gid, gameName){
+    var modal = document.getElementById('results-modal');
+    var body = document.getElementById('results-modal-body');
+    document.getElementById('results-modal-title').textContent = gameName + ' — Keputusan';
+    modal.classList.add('open');
 
     if(resultCache[gid]){
-      renderResultTable(panel, resultCache[gid]);
+      renderResultTable(body, resultCache[gid]);
       return;
     }
 
-    panel.innerHTML = '<p class="result-note">Memuatkan…</p>';
+    body.innerHTML = '<p class="result-note">Memuatkan…</p>';
 
     var callbackName = 'gvizResult_' + gid;
     window[callbackName] = function(resp){
       resultCache[gid] = resp.table;
-      renderResultTable(panel, resp.table);
+      renderResultTable(body, resp.table);
       delete window[callbackName];
     };
 
@@ -673,11 +721,23 @@
     script.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
       '/gviz/tq?gid=' + gid + '&tqx=out:json;responseHandler:' + callbackName + '&_=' + Date.now();
     script.onerror = function(){
-      panel.innerHTML = '<p class="result-note">Tak dapat tarik keputusan. Cuba lagi.</p>';
+      body.innerHTML = '<p class="result-note">Tak dapat tarik keputusan. Cuba lagi.</p>';
     };
     document.body.appendChild(script);
   }
-  window.toggleResults = toggleResults;
+  window.openResultsModal = openResultsModal;
+
+  function closeResultsModal(){
+    document.getElementById('results-modal').classList.remove('open');
+  }
+
+  document.getElementById('results-modal-close').addEventListener('click', closeResultsModal);
+  document.getElementById('results-modal').addEventListener('click', function(e){
+    if(e.target.id === 'results-modal') closeResultsModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeResultsModal();
+  });
 
   // ---------- Gallery (5 sport cards, grouped from Gallery sheet tab, opens swipeable lightbox) ----------
   var GALLERY_GID = '415481268';
@@ -740,6 +800,44 @@
       navigator.serviceWorker.register('sw.js').catch(function(){ /* ignore on unsupported hosts */ });
     });
   }
+
+  // ---------- Custom install banner (Android/Chrome) ----------
+  (function(){
+    var deferredPrompt = null;
+    var banner = document.getElementById('install-banner');
+    var installBtn = document.getElementById('install-btn');
+    var dismissBtn = document.getElementById('install-dismiss');
+
+    var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    var dismissed = false;
+    try { dismissed = sessionStorage.getItem('installDismissed') === '1'; } catch(e){}
+
+    window.addEventListener('beforeinstallprompt', function(e){
+      e.preventDefault();
+      deferredPrompt = e;
+      if(!isStandalone && !dismissed){
+        banner.classList.add('show');
+      }
+    });
+
+    installBtn.addEventListener('click', function(){
+      if(!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.finally(function(){
+        deferredPrompt = null;
+        banner.classList.remove('show');
+      });
+    });
+
+    dismissBtn.addEventListener('click', function(){
+      banner.classList.remove('show');
+      try { sessionStorage.setItem('installDismissed', '1'); } catch(e){}
+    });
+
+    window.addEventListener('appinstalled', function(){
+      banner.classList.remove('show');
+    });
+  })();
 
   // ---------- Lightbox (swipeable slideshow) ----------
   var lb = {
