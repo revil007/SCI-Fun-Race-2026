@@ -112,7 +112,7 @@
     margin-bottom:10px;
     border:1px solid var(--line);
   }
-  .game-head{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .game-head{display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap;}
   .game-no{
     width:24px; height:24px; border-radius:50%;
     background:var(--charcoal); color:var(--cream);
@@ -127,6 +127,15 @@
     color:var(--coral-ink); background:rgba(255,90,60,0.1);
     padding:3px 9px; border-radius:20px; flex-shrink:0;
   }
+  .status-badge{
+    display:none; align-items:center; gap:3px;
+    font-size:10.5px; font-weight:700; letter-spacing:0.02em;
+    color:var(--success); background:#E7F3EA;
+    padding:3px 8px; border-radius:20px; flex-shrink:0;
+    width:100%; order:3; margin-top:-2px;
+  }
+  .status-badge.show{display:inline-flex;}
+  .status-badge svg{flex-shrink:0;}
   .game-details{border-top:1px solid var(--line); padding-top:10px; display:flex; flex-direction:column; gap:7px;}
   .detail-row{display:flex; gap:10px; font-size:12.5px; line-height:1.5;}
   .detail-row .label{color:var(--muted); min-width:78px; flex-shrink:0;}
@@ -164,18 +173,59 @@
     aspect-ratio:1; border-radius:10px;
     display:flex; align-items:flex-end;
     padding:10px;
-    color:#fff; font-size:11.5px; font-weight:600;
+    color:#fff; font-size:12px; font-weight:600;
     position:relative; overflow:hidden;
     background-size:cover; background-position:center;
-    background-color:var(--surface-1, #EFEDE5);
+    background-color:var(--charcoal);
+    border:none; text-align:left; cursor:pointer;
+    font-family:'Inter', sans-serif;
   }
-  .gallery-tile::before{content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.45) 100%);}
-  .gallery-tile span{position:relative;}
+  .gallery-tile::before{content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 35%, rgba(0,0,0,0.55) 100%);}
+  .gallery-tile .tile-text{position:relative; width:100%;}
+  .gallery-tile .tile-name{display:block; font-size:13px; font-weight:600;}
+  .gallery-tile .tile-count{display:block; font-size:11px; font-weight:500; opacity:0.85; margin-top:2px;}
+  .gallery-tile:disabled{opacity:0.55; cursor:default;}
   .gallery-empty{
     grid-column:1 / -1;
     text-align:center; padding:28px 16px;
     background:var(--paper); border:1px dashed var(--line); border-radius:10px;
     color:var(--muted); font-size:13px;
+  }
+
+  .lightbox{
+    position:fixed; inset:0; background:rgba(8,10,14,0.94);
+    display:none; align-items:center; justify-content:center;
+    flex-direction:column; z-index:200; padding:20px 16px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox-top{
+    width:100%; max-width:480px; display:flex; align-items:center; justify-content:space-between;
+    color:#fff; font-size:12.5px; margin-bottom:10px;
+  }
+  .lightbox-close{
+    background:none; border:none; color:#fff; font-size:22px; line-height:1;
+    cursor:pointer; padding:4px 8px;
+  }
+  .lightbox-stage{
+    position:relative; width:100%; max-width:480px; flex:1;
+    display:flex; align-items:center; justify-content:center; min-height:0;
+    touch-action:pan-y;
+  }
+  .lightbox-stage img{
+    max-width:100%; max-height:100%; border-radius:8px; object-fit:contain;
+    user-select:none; -webkit-user-drag:none;
+  }
+  .lightbox-nav-btn{
+    position:absolute; top:50%; transform:translateY(-50%);
+    background:rgba(255,255,255,0.12); border:none; color:#fff;
+    width:36px; height:36px; border-radius:50%; font-size:18px;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .lightbox-nav-btn.prev{left:0;}
+  .lightbox-nav-btn.next{right:0;}
+  .lightbox-caption{
+    color:#fff; font-size:13px; text-align:center; margin-top:12px; min-height:18px;
+    max-width:480px;
   }
 
   /* ---------- Info ---------- */
@@ -185,12 +235,6 @@
   }
   .info-card h3{font-size:13px; font-weight:700; margin-bottom:6px; color:var(--ink);}
   .info-card p{font-size:13.5px; color:var(--muted); line-height:1.55;}
-  .info-row{display:flex; gap:10px; align-items:flex-start; margin-bottom:10px;}
-  .info-row:last-child{margin-bottom:0;}
-  .info-row svg{flex-shrink:0; margin-top:2px;}
-  .info-row div p{margin:0;}
-  .info-row div .label{font-size:12px; color:var(--muted);}
-  .info-row div .value{font-size:14px; font-weight:600; color:var(--ink);}
 
   /* ---------- Bottom nav ---------- */
   .bottom-nav{
@@ -246,11 +290,12 @@
       <span>Ogos – Dis 2026</span>
     </div>
 
-    <div class="game-card">
+    <div class="game-card" data-date="2026-08-22">
       <div class="game-head">
         <div class="game-no">1</div>
         <p class="game-name">Volleyball</p>
         <span class="game-date">22 Ogos</span>
+        <span class="status-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Selesai</span>
       </div>
       <div class="game-details">
         <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Team – Male · Team Combine – Female</span></div>
@@ -263,11 +308,12 @@
       <div class="result-panel" id="panel-1"></div>
     </div>
 
-    <div class="game-card">
+    <div class="game-card" data-date="2026-09-19">
       <div class="game-head">
         <div class="game-no">2</div>
         <p class="game-name">Badminton</p>
         <span class="game-date">19 Sep</span>
+        <span class="status-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Selesai</span>
       </div>
       <div class="game-details">
         <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Men Double – Open · Mix Double · Double-open (+Exec)</span></div>
@@ -279,11 +325,12 @@
       <div class="result-panel" id="panel-2"></div>
     </div>
 
-    <div class="game-card">
+    <div class="game-card" data-date="2026-10-10">
       <div class="game-head">
         <div class="game-no">3</div>
         <p class="game-name">Futsal &amp; Netball</p>
         <span class="game-date">10 Okt</span>
+        <span class="status-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Selesai</span>
       </div>
       <div class="game-details">
         <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Futsal: Team – Male · Netball: Team Combine – Female</span></div>
@@ -296,11 +343,12 @@
       <div class="result-panel" id="panel-3"></div>
     </div>
 
-    <div class="game-card">
+    <div class="game-card" data-date="2026-11-20">
       <div class="game-head">
         <div class="game-no">4</div>
         <p class="game-name">Bowling</p>
         <span class="game-date">20 Nov</span>
+        <span class="status-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Selesai</span>
       </div>
       <div class="game-details">
         <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Team</span></div>
@@ -313,11 +361,12 @@
       <div class="result-panel" id="panel-4"></div>
     </div>
 
-    <div class="game-card">
+    <div class="game-card" data-date="2026-12-12">
       <div class="game-head">
         <div class="game-no">5</div>
         <p class="game-name">Pickleball</p>
         <span class="game-date">12 Dis</span>
+        <span class="status-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Selesai</span>
       </div>
       <div class="game-details">
         <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Double – Male (2 wakil) · Double – Female (1 wakil) · Mix Double (1 wakil)</span></div>
@@ -334,41 +383,39 @@
   <section class="panel" id="gallery">
     <div class="section-head">
       <h2>Galeri acara</h2>
-      <span id="gallery-count">0 gambar</span>
+      <span id="gallery-count">Memuatkan…</span>
     </div>
-    <div class="gallery-grid" id="gallery-grid">
-      <div class="gallery-empty">
-        Belum ada gambar dimuat naik.<br>Gambar acara akan dipaparkan di sini semasa hari acara.
-      </div>
-    </div>
+    <div class="gallery-grid" id="gallery-grid"></div>
   </section>
+
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-top">
+      <span id="lightbox-title"></span>
+      <button class="lightbox-close" id="lightbox-close" aria-label="Tutup">&times;</button>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage">
+      <button class="lightbox-nav-btn prev" id="lightbox-prev" aria-label="Sebelum">&#8249;</button>
+      <img id="lightbox-img" src="" alt="">
+      <button class="lightbox-nav-btn next" id="lightbox-next" aria-label="Seterus">&#8250;</button>
+    </div>
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
 
   <!-- INFO -->
   <section class="panel" id="info">
     <div class="info-card">
       <h3>Butiran acara</h3>
-      <div class="info-row">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6E6B60" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
-        <div><p class="label">Tarikh</p><p class="value">14 November 2026</p></div>
-      </div>
-      <div class="info-row">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6E6B60" stroke-width="2"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-        <div><p class="label">Lokasi</p><p class="value">Stadium Sukan Acme, Blok C</p></div>
-      </div>
-      <div class="info-row">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6E6B60" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2z"/></svg>
-        <div><p class="label">Urusetia</p><p class="value">Fatin (HR) · 012-345 6789</p></div>
-      </div>
+      <p>Butiran lengkap (tarikh, lokasi dan kenalan urusetia) akan dikemaskini di sini tidak lama lagi.</p>
     </div>
 
     <div class="info-card">
       <h3>Sistem markah</h3>
-      <p>Setiap acara diberi markah mengikut kedudukan pasukan (1st = 30, 2nd = 25, 3rd = 20 dan seterusnya). Jumlah markah keseluruhan menentukan johan keseluruhan Sports Day.</p>
+      <p>Sistem pengiraan markah akan diumumkan sebelum acara pertama bermula.</p>
     </div>
 
     <div class="info-card">
       <h3>Peraturan am</h3>
-      <p>Pastikan hadir 15 minit sebelum acara masing-masing bermula. Pakaian sukan &amp; kasut sesuai diwajibkan. Sebarang bantahan hendaklah dibuat kepada urusetia dalam masa 10 minit selepas keputusan diumumkan.</p>
+      <p>Peraturan am akan dikongsikan bersama semua peserta tidak lama lagi.</p>
     </div>
   </section>
 
@@ -402,6 +449,19 @@
   document.querySelectorAll('.nav-btn').forEach(function(btn){
     btn.addEventListener('click', function(){ setTab(btn.dataset.tab); });
   });
+
+  // ---------- Auto-mark completed games based on today's date ----------
+  (function markCompletedGames(){
+    var today = new Date();
+    today.setHours(0,0,0,0);
+    document.querySelectorAll('.game-card[data-date]').forEach(function(card){
+      var d = new Date(card.getAttribute('data-date') + 'T00:00:00');
+      if(d <= today){
+        var badge = card.querySelector('.status-badge');
+        if(badge) badge.classList.add('show');
+      }
+    });
+  })();
 
   // ---------- Live leaderboard from Google Sheet (JSONP — works from file:// and https://) ----------
   var SHEET_ID = '18vfMAhWIEKJQIW8XXp0Inbhnt-8gvWG3IuqyR8oSPa4';
@@ -583,33 +643,34 @@
   }
   window.toggleResults = toggleResults;
 
-  // ---------- Gallery (auto-pull from Gallery sheet tab, converts Drive share links to direct images) ----------
+  // ---------- Gallery (5 sport cards, grouped from Gallery sheet tab, opens swipeable lightbox) ----------
   var GALLERY_GID = '415481268';
+  var GAME_LIST = ['Volleyball', 'Badminton', 'Futsal & Netball', 'Bowling', 'Pickleball'];
+  var galleryGroups = {};
 
   function driveLinkToDirect(url){
     if(!url) return url;
     var m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
     if(m && m[1]){
-      return 'https://lh3.googleusercontent.com/d/' + m[1] + '=w600';
+      return 'https://lh3.googleusercontent.com/d/' + m[1] + '=w1000';
     }
     return url;
   }
 
-  function renderGallery(photos){
+  function renderGalleryCards(){
     var grid = document.getElementById('gallery-grid');
-    document.getElementById('gallery-count').textContent = photos.length + ' gambar';
-
-    if(!photos.length){
-      grid.innerHTML = '<div class="gallery-empty">Belum ada gambar dimuat naik.<br>Gambar acara akan dipaparkan di sini semasa hari acara.</div>';
-      return;
-    }
+    var totalPhotos = 0;
+    Object.keys(galleryGroups).forEach(function(k){ totalPhotos += galleryGroups[k].length; });
+    document.getElementById('gallery-count').textContent = totalPhotos + ' gambar';
 
     var html = '';
-    photos.forEach(function(p){
-      var src = driveLinkToDirect(p.link);
-      html += '<div class="gallery-tile" style="background-image:url(\'' + src.replace(/'/g, "%27") + '\');">';
-      if(p.caption) html += '<span>' + escapeHtmlGeneric(p.caption) + '</span>';
-      html += '</div>';
+    GAME_LIST.forEach(function(game, i){
+      var photos = galleryGroups[game] || [];
+      var thumb = photos.length ? driveLinkToDirect(photos[0].link) : '';
+      var bg = thumb ? "background-image:url('" + thumb.replace(/'/g, '%27') + "');" : '';
+      html += '<button type="button" class="gallery-tile" style="' + bg + '" ' + (photos.length ? 'onclick="openLightbox(\'' + game.replace(/'/g,"\\'") + '\')"' : 'disabled') + '>';
+      html += '  <span class="tile-text"><span class="tile-name">' + escapeHtmlGeneric(game) + '</span><span class="tile-count">' + (photos.length ? photos.length + ' gambar' : 'Belum ada gambar') + '</span></span>';
+      html += '</button>';
     });
     grid.innerHTML = html;
   }
@@ -618,16 +679,16 @@
     if(!GALLERY_GID) return;
     var callbackName = 'gvizGallery';
     window[callbackName] = function(resp){
-      var rows = resp.table.rows.filter(function(r){
-        return r.c[0] && r.c[0].v;
+      GAME_LIST.forEach(function(g){ galleryGroups[g] = []; });
+      resp.table.rows.forEach(function(r){
+        var link = r.c[0] ? r.c[0].v : '';
+        var caption = r.c[1] ? r.c[1].v : '';
+        var game = r.c[2] ? String(r.c[2].v).trim() : '';
+        if(!link) return;
+        if(!galleryGroups[game]) galleryGroups[game] = [];
+        galleryGroups[game].push({ link: link, caption: caption });
       });
-      var photos = rows.map(function(r){
-        return {
-          link: r.c[0] ? r.c[0].v : '',
-          caption: r.c[1] ? r.c[1].v : ''
-        };
-      });
-      renderGallery(photos);
+      renderGalleryCards();
     };
     var script = document.createElement('script');
     script.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
@@ -636,6 +697,66 @@
   }
 
   loadGallery();
+
+  // ---------- Lightbox (swipeable slideshow) ----------
+  var lb = {
+    photos: [],
+    index: 0,
+    game: ''
+  };
+
+  function lbRender(){
+    var photo = lb.photos[lb.index];
+    document.getElementById('lightbox-img').src = driveLinkToDirect(photo.link);
+    document.getElementById('lightbox-caption').textContent = photo.caption || '';
+    document.getElementById('lightbox-title').textContent = lb.game + ' · ' + (lb.index + 1) + '/' + lb.photos.length;
+  }
+
+  function openLightbox(game){
+    lb.photos = galleryGroups[game] || [];
+    if(!lb.photos.length) return;
+    lb.game = game;
+    lb.index = 0;
+    document.getElementById('lightbox').classList.add('open');
+    lbRender();
+  }
+  window.openLightbox = openLightbox;
+
+  function closeLightbox(){
+    document.getElementById('lightbox').classList.remove('open');
+  }
+
+  function lbNext(){
+    lb.index = (lb.index + 1) % lb.photos.length;
+    lbRender();
+  }
+  function lbPrev(){
+    lb.index = (lb.index - 1 + lb.photos.length) % lb.photos.length;
+    lbRender();
+  }
+
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+  document.getElementById('lightbox-next').addEventListener('click', lbNext);
+  document.getElementById('lightbox-prev').addEventListener('click', lbPrev);
+  document.getElementById('lightbox').addEventListener('click', function(e){
+    if(e.target.id === 'lightbox') closeLightbox();
+  });
+  document.addEventListener('keydown', function(e){
+    if(!document.getElementById('lightbox').classList.contains('open')) return;
+    if(e.key === 'Escape') closeLightbox();
+    if(e.key === 'ArrowRight') lbNext();
+    if(e.key === 'ArrowLeft') lbPrev();
+  });
+
+  var touchStartX = null;
+  var stage = document.getElementById('lightbox-stage');
+  stage.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; }, { passive: true });
+  stage.addEventListener('touchend', function(e){
+    if(touchStartX === null) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if(Math.abs(dx) > 40){ dx < 0 ? lbNext() : lbPrev(); }
+    touchStartX = null;
+  }, { passive: true });
 </script>
 
 </body>
