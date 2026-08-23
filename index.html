@@ -454,7 +454,7 @@ body{background:var(--cream);}
 header{padding:20px 20px 28px; background:linear-gradient(145deg,#0E2039 0%,#132A4C 62%,#18375F 100%);}
 header::after{background:linear-gradient(120deg,rgba(255,255,255,.035),transparent 45%,rgba(244,181,42,.06));}
 .brand-row{margin-bottom:20px;}
-.brand-mark{height:30px;width:46px;}
+.brand-mark{height:52px;width:52px;}
 .live-pill{font-size:10px;padding:5px 9px;background:rgba(232,90,69,.12);border-color:rgba(232,90,69,.3);color:#FF9A87;}
 .live-dot{background:var(--coral);}
 main{max-width:500px;padding:20px 16px 96px;}
@@ -468,7 +468,8 @@ main{max-width:500px;padding:20px 16px 96px;}
 .leader-team{font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:25px;letter-spacing:.02em;line-height:1.05;}
 .leader-meta{font-size:10.5px;color:#C2CBD5;margin-top:6px;}
 .leader-meta #current-points{font-family:'JetBrains Mono',monospace;color:#F4B52A;font-weight:700;}
-.leader-rank{font-family:'Oswald',sans-serif;font-size:42px;line-height:.8;color:rgba(255,255,255,.12);font-weight:700;}
+.leader-rank{color:var(--amber);opacity:.95;flex-shrink:0;}
+.leader-rank svg{filter:drop-shadow(0 3px 8px rgba(244,181,42,.4));}
 .leader-foot{border-top:1px solid rgba(255,255,255,.12);display:flex;justify-content:space-between;padding-top:9px;margin-top:14px;font-size:9px;letter-spacing:.1em;color:#9DA9B8;}
 .lane{border-left:3px solid var(--team);border-radius:12px;padding:13px 14px;margin-bottom:7px;box-shadow:none;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
 .lane.rank-1{background:linear-gradient(90deg,#FFF8E8 0%,#fff 65%);border-top-color:#F0E4C7;border-right-color:#F0E4C7;border-bottom-color:#F0E4C7;}
@@ -542,7 +543,21 @@ main{max-width:500px;padding:20px 16px 96px;}
           <div class="leader-team" id="current-leader">Memuatkan…</div>
           <div class="leader-meta"><span id="current-points">–</span> PTS · <span id="hero-team-count">6</span> teams</div>
         </div>
-        <div class="leader-rank">01</div>
+        <div class="leader-rank">
+          <svg width="46" height="46" viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="trophyGoldGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#FFE9B0"/>
+                <stop offset="50%" stop-color="#F4B52A"/>
+                <stop offset="100%" stop-color="#C6821A"/>
+              </linearGradient>
+            </defs>
+            <circle cx="12" cy="12" r="11.5" fill="rgba(244,181,42,0.14)"/>
+            <path d="M8 21h8M12 17v4" stroke="url(#trophyGoldGrad)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M7 4h10v4a5 5 0 0 1-10 0V4z" fill="url(#trophyGoldGrad)" stroke="#9C650F" stroke-width="0.3"/>
+            <path d="M7 5H4.3a2.7 2.7 0 0 0 2.7 2.7M17 5h2.7A2.7 2.7 0 0 1 17 7.7" fill="none" stroke="url(#trophyGoldGrad)" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
       </div>
       <div class="leader-foot"><span>LIVE STANDINGS</span><span>Auto-refresh 60s</span></div>
     </div>
