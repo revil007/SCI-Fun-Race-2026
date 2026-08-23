@@ -163,6 +163,8 @@
     position:relative;
   }
   .lane.rank-1{background:linear-gradient(90deg, #FFF6E2 0%, var(--paper) 60%);}
+  .lane.rank-2{background:linear-gradient(90deg, #F1F3F5 0%, var(--paper) 60%);}
+  .lane.rank-3{background:linear-gradient(90deg, #FBEADC 0%, var(--paper) 60%);}
   .bib{
     width:30px; height:30px; border-radius:50%;
     display:flex; align-items:center; justify-content:center;
@@ -170,12 +172,13 @@
     background:var(--charcoal); color:var(--cream);
     flex-shrink:0;
   }
-  .rank-1 .bib{background:var(--amber); color:var(--amber-ink);}
+  .rank-1 .bib{background:#E8B923; color:#4A3400;}
+  .rank-2 .bib{background:#AAB4BD; color:#2E3438;}
+  .rank-3 .bib{background:#C97B3D; color:#fff;}
   .lane-info{flex:1; min-width:0;}
   .lane-info .team-name{font-size:14.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .lane-info .team-group{font-size:12px; color:var(--muted);}
   .lane-pts{font-family:'JetBrains Mono', monospace; font-size:17px; font-weight:700; min-width:38px; text-align:right;}
-  .medal{font-size:16px; margin-right:2px;}
 
   .updated-note{
     text-align:center; font-size:12px; color:var(--muted);
@@ -481,6 +484,8 @@ main{max-width:500px;padding:20px 16px 96px;}
 .leader-rank svg{filter:drop-shadow(0 3px 8px rgba(244,181,42,.4));}
 .lane{border-left:3px solid var(--team);border-radius:12px;padding:13px 14px;margin-bottom:7px;box-shadow:none;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
 .lane.rank-1{background:linear-gradient(90deg,#FFF8E8 0%,#fff 65%);border-top-color:#F0E4C7;border-right-color:#F0E4C7;border-bottom-color:#F0E4C7;}
+.lane.rank-2{background:linear-gradient(90deg,#F2F4F5 0%,#fff 65%);border-top-color:#DEE2E5;border-right-color:#DEE2E5;border-bottom-color:#DEE2E5;}
+.lane.rank-3{background:linear-gradient(90deg,#FBEBDD 0%,#fff 65%);border-top-color:#EFD2B8;border-right-color:#EFD2B8;border-bottom-color:#EFD2B8;}
 .bib{width:28px;height:28px;font-size:13px;}
 .lane-info .team-name{font-size:14px;}
 .lane-info .team-group{font-size:10.5px;}
@@ -883,12 +888,13 @@ main{max-width:500px;padding:20px 16px 96px;}
     standings.forEach(function(team, i){
       var rank = i + 1;
       var meta = TEAM_META[team.name] || { color:'#6E6B60', group:'' };
-      var isTop = anyScored && rank === 1 && team.points !== null;
+      var hasScore = anyScored && team.points !== null;
+      var rankClass = hasScore && rank <= 3 ? ' rank-' + rank : '';
       var ptsDisplay = team.points === null ? '–' : team.points;
-      html += '<div class="lane' + (isTop ? ' rank-1' : '') + '" style="--team:' + meta.color + ';">';
+      html += '<div class="lane' + rankClass + '" style="--team:' + meta.color + ';">';
       html += '  <div class="bib">' + rank + '</div>';
       html += '  <div class="lane-info">';
-      html += '    <p class="team-name">' + (isTop ? '<span class="medal">🥇</span>' : '') + escapeHtml(team.name) + '</p>';
+      html += '    <p class="team-name">' + escapeHtml(team.name) + '</p>';
       html += '    <p class="team-group">' + escapeHtml(meta.group) + '</p>';
       html += '  </div>';
       html += '  <div class="lane-pts">' + ptsDisplay + '</div>';
