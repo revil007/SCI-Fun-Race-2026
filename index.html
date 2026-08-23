@@ -161,6 +161,57 @@
   .detail-row .value a:hover{text-decoration:underline;}
   .result-pending{color:var(--muted); font-style:italic;}
 
+  /* ---------- Fun Race task cards ---------- */
+  .task-card{
+    background:var(--paper);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:10px;
+    border:1px solid var(--line);
+  }
+  .task-head{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .task-no{
+    width:26px; height:26px; border-radius:8px;
+    background:var(--coral); color:#fff;
+    font-family:'Oswald', sans-serif; font-size:13px; font-weight:600;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .task-name{font-size:15px; font-weight:600; flex:1; min-width:0;}
+  .task-body{border-top:1px solid var(--line); padding-top:10px; display:flex; flex-direction:column; gap:7px;}
+
+  .task-inspo-label{font-size:11.5px; font-weight:600; color:var(--muted); margin:2px 0 6px;}
+  .task-inspo-scroll{
+    display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    padding-bottom:12px;
+  }
+  .task-inspo-scroll img{
+    width:92px; height:92px; object-fit:cover; border-radius:8px;
+    flex-shrink:0; border:1px solid var(--line); cursor:pointer;
+  }
+
+  .task-card.mystery{
+    background:linear-gradient(145deg, #0B1524 0%, var(--charcoal) 55%, #1B3A66 130%);
+    border:1px dashed rgba(255,182,39,0.45);
+    text-align:center;
+    padding:28px 20px 26px;
+    position:relative;
+    overflow:hidden;
+  }
+  .task-card.mystery::before{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(circle at 50% 30%, rgba(255,182,39,0.18) 0%, transparent 60%);
+    pointer-events:none;
+  }
+  .task-card.mystery .task-head{position:relative; justify-content:flex-start; gap:8px; margin-bottom:14px;}
+  .task-card.mystery .task-name{color:var(--cream); flex:0 1 auto;}
+  .mystery-video{
+    width:100%; display:block; border-radius:10px;
+    margin-bottom:0; position:relative;
+    border:1px solid rgba(255,182,39,0.35);
+  }
+
   .result-btn{
     border:1px solid var(--border-strong, var(--line)); background:var(--paper);
     color:var(--coral-ink); font-size:12px; font-weight:600;
@@ -454,6 +505,72 @@
     </div>
   </section>
 
+  <!-- FUN RACE 1 -->
+  <section class="panel" id="funrace1">
+    <div class="section-head">
+      <h2>Tugasan Fun Race 1</h2>
+      <span>5 tugasan</span>
+    </div>
+
+    <div class="task-card">
+      <div class="task-head">
+        <div class="task-no">1</div>
+        <p class="task-name">One Team, One Frame</p>
+      </div>
+      <p class="task-inspo-label">Contoh inspirasi pose kreatif (tekan untuk besarkan)</p>
+      <div class="task-inspo-scroll" id="task1-inspo">
+        <img src="task1-inspo-1.jpg" alt="Contoh pose kreatif 1" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 0, 'Contoh Inspirasi')">
+        <img src="task1-inspo-2.jpg" alt="Contoh pose kreatif 2" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 1, 'Contoh Inspirasi')">
+        <img src="task1-inspo-3.jpg" alt="Contoh pose kreatif 3" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 2, 'Contoh Inspirasi')">
+        <img src="task1-inspo-4.jpg" alt="Contoh pose kreatif 4" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 3, 'Contoh Inspirasi')">
+        <img src="task1-inspo-5.jpg" alt="Contoh pose kreatif 5" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 4, 'Contoh Inspirasi')">
+      </div>
+      <div class="task-body">
+        <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
+      </div>
+    </div>
+
+    <div class="task-card">
+      <div class="task-head">
+        <div class="task-no">2</div>
+        <p class="task-name">CSR Environmental Clean-Up Challenge</p>
+      </div>
+      <div class="task-body">
+        <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
+      </div>
+    </div>
+
+    <div class="task-card">
+      <div class="task-head">
+        <div class="task-no">3</div>
+        <p class="task-name">Video Recap Challenge</p>
+      </div>
+      <div class="task-body">
+        <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
+      </div>
+    </div>
+
+    <div class="task-card">
+      <div class="task-head">
+        <div class="task-no">4</div>
+        <p class="task-name">Relay Karaoke Showdown</p>
+      </div>
+      <div class="task-body">
+        <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
+      </div>
+    </div>
+
+    <div class="task-card mystery">
+      <div class="task-head">
+        <div class="task-no">5</div>
+        <p class="task-name">The Unknown (Coming in October)</p>
+      </div>
+      <video class="mystery-video" autoplay muted loop playsinline>
+        <source src="task5-teaser.mp4" type="video/mp4">
+      </video>
+    </div>
+  </section>
+
   <!-- GALERI -->
   <section class="panel" id="gallery">
     <div class="section-head">
@@ -526,6 +643,10 @@
   <button class="nav-btn" data-tab="schedule">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
     <span>Jadual</span>
+  </button>
+  <button class="nav-btn" data-tab="funrace1">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+    <span>Fun Race</span>
   </button>
   <button class="nav-btn" data-tab="gallery">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
@@ -889,6 +1010,24 @@
     lbRender();
   }
   window.openLightbox = openLightbox;
+
+  function openLightboxWithPhotos(photos, startIndex, title){
+    if(!photos || !photos.length) return;
+    lb.photos = photos;
+    lb.game = title || '';
+    lb.index = startIndex || 0;
+    document.getElementById('lightbox').classList.add('open');
+    lbRender();
+  }
+  window.openLightboxWithPhotos = openLightboxWithPhotos;
+
+  window.task1InspoPhotos = [
+    { link: 'task1-inspo-1.jpg', caption: '' },
+    { link: 'task1-inspo-2.jpg', caption: '' },
+    { link: 'task1-inspo-3.jpg', caption: '' },
+    { link: 'task1-inspo-4.jpg', caption: '' },
+    { link: 'task1-inspo-5.jpg', caption: '' }
+  ];
 
   function closeLightbox(){
     document.getElementById('lightbox').classList.remove('open');
