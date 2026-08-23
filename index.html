@@ -83,7 +83,7 @@
   .brand-mark-box{
     background:#3E6FB0;
     border-radius:10px;
-    padding:8px;
+    padding:0 8px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -460,9 +460,9 @@
   --muted:#77756E;
 }
 body{background:var(--cream);}
-header{padding:20px 20px 28px; background:linear-gradient(145deg,#0E2039 0%,#132A4C 62%,#18375F 100%);}
+header{padding:14px 20px 18px; background:linear-gradient(145deg,#0E2039 0%,#132A4C 62%,#18375F 100%);}
 header::after{background:linear-gradient(120deg,rgba(255,255,255,.035),transparent 45%,rgba(244,181,42,.06));}
-.brand-row{margin-bottom:20px;}
+.brand-row{margin-bottom:12px;}
 .brand-mark{height:44px;width:44px;}
 .live-pill{font-size:10px;padding:5px 9px;background:rgba(232,90,69,.12);border-color:rgba(232,90,69,.3);color:#FF9A87;}
 .live-dot{background:var(--coral);}
@@ -470,7 +470,7 @@ main{max-width:500px;padding:20px 16px 96px;}
 .section-head{margin-bottom:14px;}
 .section-head h2{font-size:14px;letter-spacing:.01em;}
 .section-head span{font-size:11px;}
-.leader-hero{background:linear-gradient(135deg,#132A4C 0%,#1A3B68 100%);color:#fff;border-radius:16px;padding:17px 17px 13px;margin:0 0 18px;box-shadow:0 8px 24px rgba(16,35,63,.12);overflow:hidden;position:relative;}
+.leader-hero{background:linear-gradient(135deg,#132A4C 0%,#1A3B68 100%);color:#fff;border-radius:16px;padding:17px 17px 19px;margin:0 0 18px;box-shadow:0 8px 24px rgba(16,35,63,.12);overflow:hidden;position:relative;}
 .leader-hero:after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;right:-75px;top:-90px;background:rgba(244,181,42,.10);}
 .leader-label{font-size:9px;letter-spacing:.18em;font-weight:700;color:#B8C3D0;margin-bottom:8px;position:relative;}
 .leader-main{display:flex;align-items:flex-end;justify-content:space-between;position:relative;z-index:1;}
@@ -479,7 +479,6 @@ main{max-width:500px;padding:20px 16px 96px;}
 .leader-meta #current-points{font-family:'JetBrains Mono',monospace;color:#F4B52A;font-weight:700;}
 .leader-rank{color:var(--amber);opacity:.95;flex-shrink:0;}
 .leader-rank svg{filter:drop-shadow(0 3px 8px rgba(244,181,42,.4));}
-.leader-foot{border-top:1px solid rgba(255,255,255,.12);display:flex;justify-content:space-between;padding-top:9px;margin-top:14px;font-size:9px;letter-spacing:.1em;color:#9DA9B8;}
 .lane{border-left:3px solid var(--team);border-radius:12px;padding:13px 14px;margin-bottom:7px;box-shadow:none;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
 .lane.rank-1{background:linear-gradient(90deg,#FFF8E8 0%,#fff 65%);border-top-color:#F0E4C7;border-right-color:#F0E4C7;border-bottom-color:#F0E4C7;}
 .bib{width:28px;height:28px;font-size:13px;}
@@ -501,7 +500,7 @@ main{max-width:500px;padding:20px 16px 96px;}
 .result-btn{font-size:11px;padding:4px 10px;color:#7B3428;background:#fff;border-color:var(--line);}
 .task-card{padding:15px;}
 .task-head{margin-bottom:8px;}
-.task-no{width:25px;height:25px;border-radius:7px;background:#132A4C;font-size:12px;}
+.task-no{width:25px;height:25px;border-radius:7px;font-size:12px;background:#132A4C;color:#fff;}
 .task-name{font-size:14px;}
 .task-body{padding-top:9px;}
 .task-inspo-label{font-size:10.5px;}
@@ -568,7 +567,6 @@ main{max-width:500px;padding:20px 16px 96px;}
           </svg>
         </div>
       </div>
-      <div class="leader-foot"><span>LIVE STANDINGS</span><span>Auto-refresh 60s</span></div>
     </div>
 
     <div id="lanes">
