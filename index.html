@@ -83,7 +83,7 @@
   .brand-mark-box{
     background:#3E6FB0;
     border-radius:10px;
-    padding:8px;
+    padding:0 8px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -163,6 +163,8 @@
     position:relative;
   }
   .lane.rank-1{background:linear-gradient(90deg, #FFF6E2 0%, var(--paper) 60%);}
+  .lane.rank-2{background:linear-gradient(90deg, #F1F3F5 0%, var(--paper) 60%);}
+  .lane.rank-3{background:linear-gradient(90deg, #FBEADC 0%, var(--paper) 60%);}
   .bib{
     width:30px; height:30px; border-radius:50%;
     display:flex; align-items:center; justify-content:center;
@@ -170,12 +172,13 @@
     background:var(--charcoal); color:var(--cream);
     flex-shrink:0;
   }
-  .rank-1 .bib{background:var(--amber); color:var(--amber-ink);}
+  .rank-1 .bib{background:#E8B923; color:#4A3400;}
+  .rank-2 .bib{background:#AAB4BD; color:#2E3438;}
+  .rank-3 .bib{background:#C97B3D; color:#fff;}
   .lane-info{flex:1; min-width:0;}
   .lane-info .team-name{font-size:14.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .lane-info .team-group{font-size:12px; color:var(--muted);}
   .lane-pts{font-family:'JetBrains Mono', monospace; font-size:17px; font-weight:700; min-width:38px; text-align:right;}
-  .medal{font-size:16px; margin-right:2px;}
 
   .updated-note{
     text-align:center; font-size:12px; color:var(--muted);
@@ -272,6 +275,100 @@
     margin-bottom:0; position:relative;
     border:1px solid rgba(255,182,39,0.35);
   }
+  .fr2-coming-text{
+    font-family:'Oswald', sans-serif; font-size:22px; font-weight:600;
+    letter-spacing:.06em; text-transform:uppercase; text-align:center;
+    margin-top:16px; position:relative;
+    background:linear-gradient(90deg,#FFE9B0 0%,#F4B52A 55%,#C6821A 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .fr2-coming-text span{
+    display:inline-block; margin-left:6px;
+    font-family:'JetBrains Mono', monospace; font-weight:700;
+  }
+  .mystery-badge{
+    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:0.08em;
+    color:var(--amber); background:rgba(255,182,39,0.12);
+    border:1px solid rgba(255,182,39,0.35);
+    padding:3px 10px; border-radius:20px; text-transform:uppercase;
+    position:relative; margin-bottom:14px;
+  }
+  .mystery-sub{
+    font-size:13px; line-height:1.6; color:#C7CBD1; position:relative;
+  }
+  .mystery-sub strong{color:var(--cream); font-family:'Oswald', sans-serif; letter-spacing:0.02em;}
+
+  /* ---------- Fun Race Part 1/2 toggle ---------- */
+  .fr-toggle{
+    display:flex; gap:6px; background:var(--surface-2, #EFEDE5);
+    border-radius:10px; padding:4px; margin-bottom:16px;
+  }
+  .fr-toggle-btn{
+    flex:1; border:none; background:none; cursor:pointer;
+    font-family:'Inter', sans-serif; font-size:13px; font-weight:600;
+    color:var(--muted); padding:8px 0; border-radius:8px;
+  }
+  .fr-toggle-btn.active{background:var(--paper); color:var(--ink); box-shadow:0 1px 3px rgba(20,22,28,0.08);}
+  .fr-part{display:none;}
+  .fr-part.active{display:block;}
+  .fr-part-status{
+    font-size:11.5px; font-weight:600; color:var(--muted);
+    margin-bottom:12px; text-align:center;
+  }
+
+  .fr-status-heading{
+    font-size:12.5px; font-weight:700; letter-spacing:.04em;
+    color:var(--ink); text-align:center; margin-bottom:10px;
+  }
+
+  .fr-progress{
+    background:var(--paper);
+    border:1px solid var(--line);
+    color:var(--ink); border-radius:14px;
+    padding:14px 16px 15px; margin-bottom:16px;
+  }
+  .fr-progress-title{
+    font-size:10.5px; font-weight:700; letter-spacing:.1em;
+    color:var(--muted); text-transform:uppercase; margin-bottom:10px;
+  }
+  .fr-progress-row{display:flex; align-items:center; gap:10px;}
+  .fr-progress-bar{
+    flex:1; height:9px; border-radius:6px; background:var(--surface-2, #EFEDE5);
+    overflow:visible; position:relative;
+  }
+  .fr-progress-fill{
+    height:100%; border-radius:6px; width:0%; position:relative;
+    background:linear-gradient(90deg,#D6280C 0%,#FF5A1F 35%,#FF9A1F 65%,#FFCF4D 100%);
+    box-shadow:0 0 10px rgba(255,90,20,.55), 0 0 3px rgba(255,154,20,.7);
+    animation:fireFlicker 1.4s ease-in-out infinite;
+    transition:width .4s ease;
+  }
+  @keyframes fireFlicker{
+    0%,100%{ filter:brightness(1); }
+    50%{ filter:brightness(1.18); }
+  }
+  .fr-progress-pct{
+    font-family:'JetBrains Mono', monospace; font-size:12.5px; font-weight:700;
+    color:var(--coral-ink); flex-shrink:0; min-width:32px; text-align:right;
+  }
+  .fire-tip{
+    position:absolute; right:-9px; top:50%;
+    transform:translateY(-50%);
+    font-size:15px; line-height:1;
+    filter:drop-shadow(0 0 4px rgba(255,90,20,.8));
+    animation:fireWobble 0.9s ease-in-out infinite;
+    z-index:2;
+  }
+  @keyframes fireWobble{
+    0%,100%{ transform:translateY(-50%) scale(1) rotate(-3deg); }
+    50%{ transform:translateY(-52%) scale(1.12) rotate(3deg); }
+  }
+  .fr-progress-dates-mini{
+    display:flex; justify-content:space-between;
+    font-size:10.5px; color:var(--muted); margin-top:9px;
+  }
+
+
 
   .result-btn{
     border:1px solid var(--border-strong, var(--line)); background:var(--paper);
@@ -460,9 +557,9 @@
   --muted:#77756E;
 }
 body{background:var(--cream);}
-header{padding:20px 20px 28px; background:linear-gradient(145deg,#0E2039 0%,#132A4C 62%,#18375F 100%);}
+header{padding:14px 20px 18px; background:linear-gradient(145deg,#0E2039 0%,#132A4C 62%,#18375F 100%);}
 header::after{background:linear-gradient(120deg,rgba(255,255,255,.035),transparent 45%,rgba(244,181,42,.06));}
-.brand-row{margin-bottom:20px;}
+.brand-row{margin-bottom:12px;}
 .brand-mark{height:44px;width:44px;}
 .live-pill{font-size:10px;padding:5px 9px;background:rgba(232,90,69,.12);border-color:rgba(232,90,69,.3);color:#FF9A87;}
 .live-dot{background:var(--coral);}
@@ -470,7 +567,7 @@ main{max-width:500px;padding:20px 16px 96px;}
 .section-head{margin-bottom:14px;}
 .section-head h2{font-size:14px;letter-spacing:.01em;}
 .section-head span{font-size:11px;}
-.leader-hero{background:linear-gradient(135deg,#132A4C 0%,#1A3B68 100%);color:#fff;border-radius:16px;padding:17px 17px 13px;margin:0 0 18px;box-shadow:0 8px 24px rgba(16,35,63,.12);overflow:hidden;position:relative;}
+.leader-hero{background:linear-gradient(135deg,#132A4C 0%,#1A3B68 100%);color:#fff;border-radius:16px;padding:17px 17px 19px;margin:0 0 18px;box-shadow:0 8px 24px rgba(16,35,63,.12);overflow:hidden;position:relative;}
 .leader-hero:after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;right:-75px;top:-90px;background:rgba(244,181,42,.10);}
 .leader-label{font-size:9px;letter-spacing:.18em;font-weight:700;color:#B8C3D0;margin-bottom:8px;position:relative;}
 .leader-main{display:flex;align-items:flex-end;justify-content:space-between;position:relative;z-index:1;}
@@ -479,9 +576,10 @@ main{max-width:500px;padding:20px 16px 96px;}
 .leader-meta #current-points{font-family:'JetBrains Mono',monospace;color:#F4B52A;font-weight:700;}
 .leader-rank{color:var(--amber);opacity:.95;flex-shrink:0;}
 .leader-rank svg{filter:drop-shadow(0 3px 8px rgba(244,181,42,.4));}
-.leader-foot{border-top:1px solid rgba(255,255,255,.12);display:flex;justify-content:space-between;padding-top:9px;margin-top:14px;font-size:9px;letter-spacing:.1em;color:#9DA9B8;}
 .lane{border-left:3px solid var(--team);border-radius:12px;padding:13px 14px;margin-bottom:7px;box-shadow:none;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
 .lane.rank-1{background:linear-gradient(90deg,#FFF8E8 0%,#fff 65%);border-top-color:#F0E4C7;border-right-color:#F0E4C7;border-bottom-color:#F0E4C7;}
+.lane.rank-2{background:linear-gradient(90deg,#F2F4F5 0%,#fff 65%);border-top-color:#DEE2E5;border-right-color:#DEE2E5;border-bottom-color:#DEE2E5;}
+.lane.rank-3{background:linear-gradient(90deg,#FBEBDD 0%,#fff 65%);border-top-color:#EFD2B8;border-right-color:#EFD2B8;border-bottom-color:#EFD2B8;}
 .bib{width:28px;height:28px;font-size:13px;}
 .lane-info .team-name{font-size:14px;}
 .lane-info .team-group{font-size:10.5px;}
@@ -501,7 +599,7 @@ main{max-width:500px;padding:20px 16px 96px;}
 .result-btn{font-size:11px;padding:4px 10px;color:#7B3428;background:#fff;border-color:var(--line);}
 .task-card{padding:15px;}
 .task-head{margin-bottom:8px;}
-.task-no{width:25px;height:25px;border-radius:7px;background:#132A4C;font-size:12px;}
+.task-no{width:25px;height:25px;border-radius:7px;font-size:12px;background:#132A4C;color:#fff;}
 .task-name{font-size:14px;}
 .task-body{padding-top:9px;}
 .task-inspo-label{font-size:10.5px;}
@@ -568,7 +666,6 @@ main{max-width:500px;padding:20px 16px 96px;}
           </svg>
         </div>
       </div>
-      <div class="leader-foot"><span>LIVE STANDINGS</span><span>Auto-refresh 60s</span></div>
     </div>
 
     <div id="lanes">
@@ -672,8 +769,27 @@ main{max-width:500px;padding:20px 16px 96px;}
   <!-- FUN RACE 1 -->
   <section class="panel" id="funrace1">
     <div class="section-head">
-      <h2>Tugasan Fun Race 1</h2>
-      <span>5 tugasan</span>
+      <h2>Fun Race</h2>
+    </div>
+
+    <div class="fr-toggle">
+      <button type="button" class="fr-toggle-btn active" data-part="1" onclick="setFunRacePart(1)">Part 1</button>
+      <button type="button" class="fr-toggle-btn" data-part="2" onclick="setFunRacePart(2)">Part 2</button>
+    </div>
+
+    <div class="fr-part active" id="fr-part-1">
+    <p class="fr-status-heading" id="fr-progress-label">Fun Race Part 1 · Sedang Berjalan</p>
+    <div class="fr-progress">
+      <p class="fr-progress-title">CHALLENGES COMPLETED</p>
+      <div class="fr-progress-row">
+        <div class="fr-progress-bar">
+          <div class="fr-progress-fill" id="fr-submit-fill">
+            <span class="fire-tip">🔥</span>
+          </div>
+        </div>
+        <span class="fr-progress-pct" id="fr-submit-percent-label">–%</span>
+      </div>
+      <p class="fr-progress-dates-mini"><span>22 Ogos</span><span>31 Dis</span></p>
     </div>
 
     <div class="task-card">
@@ -733,6 +849,20 @@ main{max-width:500px;padding:20px 16px 96px;}
         <source src="task5-teaser.mp4" type="video/mp4">
       </video>
     </div>
+
+    </div>
+
+    <div class="fr-part" id="fr-part-2">
+    <p class="fr-part-status" id="fr-status-2">Coming 2027</p>
+
+      <div class="task-card mystery">
+        <video class="mystery-video" autoplay muted loop playsinline>
+          <source src="task-funrace2-teaser.mp4" type="video/mp4">
+        </video>
+        <p class="fr2-coming-text">Coming <span>2027</span></p>
+      </div>
+    </div>
+
   </section>
 
   <!-- GALERI -->
@@ -845,6 +975,88 @@ main{max-width:500px;padding:20px 16px 96px;}
     });
   })();
 
+  // ---------- Fun Race Part 1/2 toggle ----------
+  function setFunRacePart(part){
+    document.querySelectorAll('.fr-toggle-btn').forEach(function(b){
+      b.classList.toggle('active', Number(b.dataset.part) === part);
+    });
+    document.getElementById('fr-part-1').classList.toggle('active', part === 1);
+    document.getElementById('fr-part-2').classList.toggle('active', part === 2);
+  }
+  window.setFunRacePart = setFunRacePart;
+
+  (function setFunRaceStatusLabel(){
+    var today = new Date(); today.setHours(0,0,0,0);
+    var partStart = new Date('2026-08-22T00:00:00');
+    var partEnd = new Date('2026-12-31T00:00:00');
+    var labelEl = document.getElementById('fr-progress-label');
+    if(!labelEl) return;
+
+    if(today < partStart){
+      labelEl.textContent = 'Fun Race Part 1 · Belum Bermula';
+    } else if(today > partEnd){
+      labelEl.textContent = 'Fun Race Part 1 · Selesai';
+    } else {
+      labelEl.textContent = 'Fun Race Part 1 · Sedang Berjalan';
+    }
+  })();
+
+  // ---------- Task submission progress (Fun Race Task 1-4 response sheet, by column) ----------
+  (function loadSubmissionProgress(){
+    var pctEl = document.getElementById('fr-submit-percent-label');
+    if(!pctEl) return;
+    var SUBMIT_SHEET_ID = '1PIj0zFq3TyHgV22O_jp-e-x0hWtnyelzO6d04Jt3T0c';
+
+    // Column groups (0-indexed against each response row's cell array).
+    // Each group = one "task slot"; a group counts as done if ANY row has a value in ANY of its columns.
+    var TASK_COLUMN_GROUPS = [
+      [1],      // Volleyball : Team
+      [2],      // Volleyball : Bonus Pose
+      [3],      // Badminton : Team
+      [4],      // Badminton : Bonus Pose
+      [5],      // Futsal & Netball : Team
+      [6],      // Futsal & Netball : Bonus Pose
+      [7],      // Bowling : Team
+      [8],      // Bowling : Bonus Pose
+      [9],      // Pickleball : Team
+      [10],     // Pickleball : Bonus Pose
+      [11],     // CSR activity (Group Photo)
+      [12, 13], // Video Recap Challenge (upload or link fallback)
+      [14, 15]  // Relay Karaoke Showdown (upload or link fallback)
+    ];
+
+    function isFilled(cell){
+      return !!(cell && cell.v !== null && cell.v !== undefined && String(cell.v).trim() !== '');
+    }
+
+    var callbackName = 'gvizSubmitProgress';
+    window[callbackName] = function(resp){
+      var rows = resp.table.rows;
+      var doneCount = 0;
+
+      TASK_COLUMN_GROUPS.forEach(function(group){
+        var hasAny = rows.some(function(r){
+          return group.some(function(colIndex){ return isFilled(r.c[colIndex]); });
+        });
+        if(hasAny) doneCount++;
+      });
+
+      var total = TASK_COLUMN_GROUPS.length;
+      var percent = Math.round((doneCount / total) * 100);
+
+      document.getElementById('fr-submit-percent-label').textContent = percent + '%';
+      document.getElementById('fr-submit-fill').style.width = percent + '%';
+
+      delete window[callbackName];
+    };
+
+    var script = document.createElement('script');
+    script.src = 'https://docs.google.com/spreadsheets/d/' + SUBMIT_SHEET_ID +
+      '/gviz/tq?tqx=out:json;responseHandler:' + callbackName + '&_=' + Date.now();
+    script.onerror = function(){ pctEl.textContent = '–'; };
+    document.body.appendChild(script);
+  })();
+
   // ---------- Live leaderboard from Google Sheet (JSONP — works from file:// and https://) ----------
   var SHEET_ID = '18vfMAhWIEKJQIW8XXp0Inbhnt-8gvWG3IuqyR8oSPa4';
   var SHEET_GID = '0';
@@ -885,12 +1097,13 @@ main{max-width:500px;padding:20px 16px 96px;}
     standings.forEach(function(team, i){
       var rank = i + 1;
       var meta = TEAM_META[team.name] || { color:'#6E6B60', group:'' };
-      var isTop = anyScored && rank === 1 && team.points !== null;
+      var hasScore = anyScored && team.points !== null;
+      var rankClass = hasScore && rank <= 3 ? ' rank-' + rank : '';
       var ptsDisplay = team.points === null ? '–' : team.points;
-      html += '<div class="lane' + (isTop ? ' rank-1' : '') + '" style="--team:' + meta.color + ';">';
+      html += '<div class="lane' + rankClass + '" style="--team:' + meta.color + ';">';
       html += '  <div class="bib">' + rank + '</div>';
       html += '  <div class="lane-info">';
-      html += '    <p class="team-name">' + (isTop ? '<span class="medal">🥇</span>' : '') + escapeHtml(team.name) + '</p>';
+      html += '    <p class="team-name">' + escapeHtml(team.name) + '</p>';
       html += '    <p class="team-group">' + escapeHtml(meta.group) + '</p>';
       html += '  </div>';
       html += '  <div class="lane-pts">' + ptsDisplay + '</div>';
