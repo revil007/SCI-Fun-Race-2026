@@ -630,7 +630,6 @@ main{max-width:500px;padding:20px 16px 96px;}
   <section class="panel active" id="board">
     <div class="section-head">
       <h2>Papan kedudukan pasukan</h2>
-      <span id="team-count">6 pasukan</span>
     </div>
 
     <div class="leader-hero">
@@ -638,7 +637,7 @@ main{max-width:500px;padding:20px 16px 96px;}
       <div class="leader-main">
         <div>
           <div class="leader-team" id="current-leader">Memuatkan…</div>
-          <div class="leader-meta"><span id="current-points">–</span> PTS · <span id="hero-team-count">6</span> teams</div>
+          <div class="leader-meta"><span id="current-points">–</span> PTS</div>
         </div>
         <div class="leader-rank">
           <svg width="46" height="46" viewBox="0 0 24 24">
@@ -1052,12 +1051,12 @@ main{max-width:500px;padding:20px 16px 96px;}
   var REFRESH_MS = 60000;
 
   var TEAM_META = {
-    'Obsidian Elite': { color:'#E8B923', group:'Kumpulan 1 · Gold + Black' },
-    'Red Gladiators': { color:'#D3372F', group:'Kumpulan 2 · Scarlet Red' },
-    'Onyx':           { color:'#1C1F2A', group:'Kumpulan 3 · Black' },
-    'Navy Titan':     { color:'#2C5FA8', group:'Kumpulan 4 · Navy Blue' },
-    'Pink Storm':     { color:'#C94F82', group:'Kumpulan 5 · Pink & Black' },
-    'Diamond X':      { color:'#8FA6C4', group:'Kumpulan 6 · White + Blue' }
+    'Obsidian Elite': { color:'#E8B923' },
+    'Red Gladiators': { color:'#D3372F' },
+    'Onyx':           { color:'#1C1F2A' },
+    'Navy Titan':     { color:'#2C5FA8' },
+    'Pink Storm':     { color:'#C94F82' },
+    'Diamond X':      { color:'#8FA6C4' }
   };
 
   function escapeHtml(str){
@@ -1068,8 +1067,6 @@ main{max-width:500px;padding:20px 16px 96px;}
 
   function renderLanes(standings){
     var lanesEl = document.getElementById('lanes');
-    document.getElementById('team-count').textContent = standings.length + ' pasukan';
-    document.getElementById('hero-team-count').textContent = standings.length;
     if(standings.length){
       document.getElementById('current-leader').textContent = standings[0].name;
       document.getElementById('current-points').textContent = standings[0].points === null ? '–' : standings[0].points;
@@ -1085,7 +1082,7 @@ main{max-width:500px;padding:20px 16px 96px;}
     var html = '';
     standings.forEach(function(team, i){
       var rank = i + 1;
-      var meta = TEAM_META[team.name] || { color:'#6E6B60', group:'' };
+      var meta = TEAM_META[team.name] || { color:'#6E6B60' };
       var hasScore = anyScored && team.points !== null;
       var rankClass = hasScore && rank <= 3 ? ' rank-' + rank : '';
       var ptsDisplay = team.points === null ? '–' : team.points;
@@ -1093,7 +1090,6 @@ main{max-width:500px;padding:20px 16px 96px;}
       html += '  <div class="bib">' + rank + '</div>';
       html += '  <div class="lane-info">';
       html += '    <p class="team-name">' + escapeHtml(team.name) + '</p>';
-      html += '    <p class="team-group">' + escapeHtml(meta.group) + '</p>';
       html += '  </div>';
       html += '  <div class="lane-pts">' + ptsDisplay + '</div>';
       html += '</div>';
