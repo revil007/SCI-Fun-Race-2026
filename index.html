@@ -245,6 +245,10 @@
   .game-card.status-completed .game-date{color:#5F655F; background:rgba(91,135,101,.10);}
 
   .schedule-subtitle{display:block; margin-top:3px; color:var(--muted); font-size:10.5px;}
+  .schedule-note{
+    font-size:11px; color:var(--muted); font-style:italic;
+    text-align:center; line-height:1.5; margin-top:6px; padding:0 8px;
+  }
   .game-details{border-top:1px solid var(--line); padding-top:10px; display:flex; flex-direction:column; gap:7px;}
   .detail-row{display:flex; gap:10px; font-size:12.5px; line-height:1.5;}
   .detail-row .label{color:var(--muted); min-width:78px; flex-shrink:0;}
@@ -261,7 +265,7 @@
     margin-bottom:10px;
     border:1px solid var(--line);
   }
-  .task-head{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .task-head{display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap;}
   .task-no{
     width:26px; height:26px; border-radius:8px;
     background:var(--amber); color:var(--amber-ink);
@@ -772,6 +776,8 @@ main{max-width:500px;padding:20px 16px 96px;}
         <div class="detail-row"><span class="label">Keputusan</span><span class="value"><button class="result-btn" onclick="openResultsModal(1371103488, 'Pickleball')">Lihat keputusan</button></span></div>
       </div>
     </div>
+
+    <p class="schedule-note">Nota: Tarikh di atas tertakluk kepada perubahan. Sila semak halaman ini dari semasa ke semasa untuk kemaskini terkini.</p>
   </section>
 
   <!-- FUN RACE 1 -->
@@ -835,9 +841,9 @@ main{max-width:500px;padding:20px 16px 96px;}
       <div class="task-head">
         <div class="task-no">2</div>
         <p class="task-name">CSR Challenge</p>
+        <span class="game-date" title="Sebelum 12:00 tengah malam pada hari acara CSR dijalankan"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Hari CSR</span>
       </div>
       <div class="task-body">
-        <div class="detail-row"><span class="label">⏰ Tarikh akhir</span><span class="value">Pada hari acara CSR dijalankan (sebelum 12:00 tengah malam)</span></div>
         <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
       </div>
     </div>
@@ -846,9 +852,9 @@ main{max-width:500px;padding:20px 16px 96px;}
       <div class="task-head">
         <div class="task-no">3</div>
         <p class="task-name">Video Recap Challenge</p>
+        <span class="game-date"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>31 Dis 2026</span>
       </div>
       <div class="task-body">
-        <div class="detail-row"><span class="label">⏰ Tarikh akhir</span><span class="value">31 Disember 2026</span></div>
         <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
       </div>
     </div>
@@ -857,9 +863,9 @@ main{max-width:500px;padding:20px 16px 96px;}
       <div class="task-head">
         <div class="task-no">4</div>
         <p class="task-name">Relay Karaoke Showdown</p>
+        <span class="game-date"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>31 Dis 2026</span>
       </div>
       <div class="task-body">
-        <div class="detail-row"><span class="label">⏰ Tarikh akhir</span><span class="value">31 Disember 2026</span></div>
         <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
       </div>
     </div>
