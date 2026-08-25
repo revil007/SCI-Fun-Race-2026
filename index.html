@@ -81,19 +81,37 @@
     min-width:0;
   }
   .brand-mark-box{
-    background:#3E6FB0;
+    background:linear-gradient(160deg, #5488CC 0%, #3E6FB0 45%, #2E5690 100%);
     border-radius:10px;
     padding:0 8px;
     display:flex;
     align-items:center;
     justify-content:center;
     flex-shrink:0;
+    position:relative;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.22);
+    box-shadow:
+      0 4px 10px rgba(10,20,40,0.35),
+      0 1px 2px rgba(10,20,40,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.25);
+  }
+  .brand-mark-box::before{
+    content:"";
+    position:absolute;
+    top:-40%; left:-20%;
+    width:80%; height:70%;
+    background:linear-gradient(160deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 70%);
+    border-radius:50%;
+    pointer-events:none;
   }
   .brand-mark{
     width:42px;
     height:42px;
     object-fit:contain;
     flex-shrink:0;
+    position:relative;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,0.25));
   }
   .club-copy{min-width:0;}
   .club-name{
