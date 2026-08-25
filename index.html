@@ -274,13 +274,15 @@
 
   .task-inspo-label{font-size:11.5px; font-weight:600; color:var(--muted); margin:2px 0 6px;}
   .task-inspo-scroll{
-    display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    display:flex; gap:10px; overflow-x:auto; -webkit-overflow-scrolling:touch;
     padding-bottom:12px;
   }
+  .task-inspo-item{display:flex; flex-direction:column; align-items:center; gap:4px; flex-shrink:0;}
   .task-inspo-scroll img{
     width:92px; height:92px; object-fit:cover; border-radius:8px;
     flex-shrink:0; border:1px solid var(--line); cursor:pointer;
   }
+  .task-inspo-caption{font-size:10.5px; font-weight:600; color:var(--muted); text-align:center;}
 
   .task-card.mystery{
     background:linear-gradient(145deg, #0B1524 0%, var(--charcoal) 55%, #1B3A66 130%);
@@ -368,18 +370,6 @@
   .fr-progress-pct{
     font-family:'JetBrains Mono', monospace; font-size:12.5px; font-weight:700;
     color:var(--coral-ink); flex-shrink:0; min-width:32px; text-align:right;
-  }
-  .fire-tip{
-    position:absolute; right:-9px; top:50%;
-    transform:translateY(-50%);
-    font-size:15px; line-height:1;
-    filter:drop-shadow(0 0 4px rgba(255,90,20,.8));
-    animation:fireWobble 0.9s ease-in-out infinite;
-    z-index:2;
-  }
-  @keyframes fireWobble{
-    0%,100%{ transform:translateY(-50%) scale(1) rotate(-3deg); }
-    50%{ transform:translateY(-52%) scale(1.12) rotate(3deg); }
   }
   .fr-progress-dates-mini{
     display:flex; justify-content:space-between;
@@ -801,9 +791,7 @@ main{max-width:500px;padding:20px 16px 96px;}
       <p class="fr-progress-title">CHALLENGES COMPLETED</p>
       <div class="fr-progress-row">
         <div class="fr-progress-bar">
-          <div class="fr-progress-fill" id="fr-submit-fill">
-            <span class="fire-tip">🔥</span>
-          </div>
+          <div class="fr-progress-fill" id="fr-submit-fill"></div>
         </div>
         <span class="fr-progress-pct" id="fr-submit-percent-label">–%</span>
       </div>
@@ -815,13 +803,28 @@ main{max-width:500px;padding:20px 16px 96px;}
         <div class="task-no">1</div>
         <p class="task-name">One Team, One Frame</p>
       </div>
-      <p class="task-inspo-label">Contoh inspirasi pose kreatif (tekan untuk besarkan)</p>
+      <p class="task-inspo-label">Pose ikut sukan (tekan untuk besarkan)</p>
       <div class="task-inspo-scroll" id="task1-inspo">
-        <img src="task1-inspo-1.jpg" alt="Contoh pose kreatif 1" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 0, 'Contoh Inspirasi')">
-        <img src="task1-inspo-2.jpg" alt="Contoh pose kreatif 2" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 1, 'Contoh Inspirasi')">
-        <img src="task1-inspo-3.jpg" alt="Contoh pose kreatif 3" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 2, 'Contoh Inspirasi')">
-        <img src="task1-inspo-4.jpg" alt="Contoh pose kreatif 4" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 3, 'Contoh Inspirasi')">
-        <img src="task1-inspo-5.jpg" alt="Contoh pose kreatif 5" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 4, 'Contoh Inspirasi')">
+        <div class="task-inspo-item">
+          <img src="task1-inspo-5.jpg" alt="Pose Volleyball" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 0, 'One Team, One Frame')">
+          <span class="task-inspo-caption">Volleyball</span>
+        </div>
+        <div class="task-inspo-item">
+          <img src="task1-inspo-2.jpg" alt="Pose Badminton" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 1, 'One Team, One Frame')">
+          <span class="task-inspo-caption">Badminton</span>
+        </div>
+        <div class="task-inspo-item">
+          <img src="task1-inspo-3.jpg" alt="Pose Futsal & Netball" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 2, 'One Team, One Frame')">
+          <span class="task-inspo-caption">Futsal &amp; Netball</span>
+        </div>
+        <div class="task-inspo-item">
+          <img src="task1-inspo-4.jpg" alt="Pose Bowling" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 3, 'One Team, One Frame')">
+          <span class="task-inspo-caption">Bowling</span>
+        </div>
+        <div class="task-inspo-item">
+          <img src="task1-inspo-1.jpg" alt="Pose Pickleball" loading="lazy" onclick="openLightboxWithPhotos(window.task1InspoPhotos, 4, 'One Team, One Frame')">
+          <span class="task-inspo-caption">Pickleball</span>
+        </div>
       </div>
       <div class="task-body">
         <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
@@ -831,9 +834,10 @@ main{max-width:500px;padding:20px 16px 96px;}
     <div class="task-card">
       <div class="task-head">
         <div class="task-no">2</div>
-        <p class="task-name">CSR Environmental Clean-Up Challenge</p>
+        <p class="task-name">CSR Challenge</p>
       </div>
       <div class="task-body">
+        <div class="detail-row"><span class="label">⏰ Tarikh akhir</span><span class="value">Pada hari acara CSR dijalankan (sebelum 12:00 tengah malam)</span></div>
         <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
       </div>
     </div>
@@ -844,6 +848,7 @@ main{max-width:500px;padding:20px 16px 96px;}
         <p class="task-name">Video Recap Challenge</p>
       </div>
       <div class="task-body">
+        <div class="detail-row"><span class="label">⏰ Tarikh akhir</span><span class="value">31 Disember 2026</span></div>
         <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
       </div>
     </div>
@@ -854,6 +859,7 @@ main{max-width:500px;padding:20px 16px 96px;}
         <p class="task-name">Relay Karaoke Showdown</p>
       </div>
       <div class="task-body">
+        <div class="detail-row"><span class="label">⏰ Tarikh akhir</span><span class="value">31 Disember 2026</span></div>
         <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
       </div>
     </div>
@@ -1457,11 +1463,11 @@ main{max-width:500px;padding:20px 16px 96px;}
   window.openLightboxWithPhotos = openLightboxWithPhotos;
 
   window.task1InspoPhotos = [
-    { link: 'task1-inspo-1.jpg', caption: '' },
-    { link: 'task1-inspo-2.jpg', caption: '' },
-    { link: 'task1-inspo-3.jpg', caption: '' },
-    { link: 'task1-inspo-4.jpg', caption: '' },
-    { link: 'task1-inspo-5.jpg', caption: '' }
+    { link: 'task1-inspo-5.jpg', caption: 'Volleyball · Tarikh akhir: 23 Ogos 2026' },
+    { link: 'task1-inspo-2.jpg', caption: 'Badminton · Tarikh akhir: 20 Sep 2026' },
+    { link: 'task1-inspo-3.jpg', caption: 'Futsal & Netball · Tarikh akhir: 11 Okt 2026' },
+    { link: 'task1-inspo-4.jpg', caption: 'Bowling · Tarikh akhir: 21 Nov 2026' },
+    { link: 'task1-inspo-1.jpg', caption: 'Pickleball · Tarikh akhir: 12 Dis 2026' }
   ];
 
   function closeLightbox(){
