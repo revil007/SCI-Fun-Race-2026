@@ -209,14 +209,42 @@
     padding:3px 9px; border-radius:20px; flex-shrink:0;
   }
   .status-badge{
-    display:none; align-items:center; gap:3px;
-    font-size:10.5px; font-weight:700; letter-spacing:0.02em;
-    color:var(--success); background:#E7F3EA;
-    padding:3px 8px; border-radius:20px; flex-shrink:0;
-    width:100%; order:3; margin-top:-2px;
+    display:inline-flex; align-items:center; gap:4px;
+    width:auto; order:initial; margin-top:0;
+    font-size:9px; font-weight:700; letter-spacing:0.02em;
+    padding:4px 8px; border-radius:20px; flex-shrink:0;
+    white-space:nowrap;
   }
   .status-badge.show{display:inline-flex;}
-  .status-badge svg{flex-shrink:0;}
+  .status-badge svg{flex-shrink:0; display:block;}
+  .status-badge.upcoming{color:#666963; background:#ECECE8;}
+  .status-badge.ongoing{color:#9A6500; background:#FFF0C8; border:1px solid #F1D58A;}
+  .status-badge.completed{color:#4F7658; background:#E5EEE7;}
+  .status-badge .status-dot{
+    width:6px; height:6px; border-radius:50%;
+    display:inline-block; background:currentColor;
+  }
+  .status-badge.ongoing .status-dot{animation:pulse 1.4s ease-in-out infinite;}
+  @keyframes pulse{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:0.45; transform:scale(0.7); }
+  }
+
+  /* ---------- Schedule card status styling ---------- */
+  .game-card{position:relative; overflow:hidden; transition:background .2s ease, border-color .2s ease, box-shadow .2s ease;}
+  .game-card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:#D8D7D2;}
+  .game-card.status-upcoming{background:#FFFFFF; border-color:var(--line);}
+  .game-card.status-upcoming::before{background:#C9C9C3;}
+  .game-card.status-ongoing{background:#FFF9EA; border-color:#F0D99B; box-shadow:0 4px 14px rgba(194,145,25,.08);}
+  .game-card.status-ongoing::before{background:#F4B52A;}
+  .game-card.status-completed{background:#F3F1EB; border-color:#E0DDD4;}
+  .game-card.status-completed::before{background:#5B8765;}
+  .game-card.status-ongoing .game-no{background:#F4B52A; color:#5C3D00;}
+  .game-card.status-completed .game-no{background:#5B8765; color:#fff;}
+  .game-card.status-ongoing .game-date{color:#9A6500; background:rgba(244,181,42,.16);}
+  .game-card.status-completed .game-date{color:#5F655F; background:rgba(91,135,101,.10);}
+
+  .schedule-subtitle{display:block; margin-top:3px; color:var(--muted); font-size:10.5px;}
   .game-details{border-top:1px solid var(--line); padding-top:10px; display:flex; flex-direction:column; gap:7px;}
   .detail-row{display:flex; gap:10px; font-size:12.5px; line-height:1.5;}
   .detail-row .label{color:var(--muted); min-width:78px; flex-shrink:0;}
@@ -275,17 +303,7 @@
     margin-bottom:0; position:relative;
     border:1px solid rgba(255,182,39,0.35);
   }
-  .fr2-coming-text{
-    font-family:'Oswald', sans-serif; font-size:22px; font-weight:600;
-    letter-spacing:.06em; text-transform:uppercase; text-align:center;
-    margin-top:16px; position:relative;
-    background:linear-gradient(90deg,#FFE9B0 0%,#F4B52A 55%,#C6821A 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-  }
-  .fr2-coming-text span{
-    display:inline-block; margin-left:6px;
-    font-family:'JetBrains Mono', monospace; font-weight:700;
-  }
+
   .mystery-badge{
     display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:0.08em;
     color:var(--amber); background:rgba(255,182,39,0.12);
@@ -595,7 +613,6 @@ main{max-width:500px;padding:20px 16px 96px;}
 .game-card.expanded .game-details{display:flex;}
 .game-card::after{content:'Lihat butiran  +';display:block;text-align:right;margin-top:9px;font-size:10px;font-weight:600;color:#8B8981;}
 .game-card.expanded::after{content:'Tutup butiran  −';}
-.status-badge{width:auto;order:initial;margin-top:0;font-size:9px;padding:3px 7px;}
 .result-btn{font-size:11px;padding:4px 10px;color:#7B3428;background:#fff;border-color:var(--line);}
 .task-card{padding:15px;}
 .task-head{margin-bottom:8px;}
@@ -640,7 +657,6 @@ main{max-width:500px;padding:20px 16px 96px;}
   <section class="panel active" id="board">
     <div class="section-head">
       <h2>Papan kedudukan pasukan</h2>
-      <span id="team-count">6 pasukan</span>
     </div>
 
     <div class="leader-hero">
@@ -648,7 +664,7 @@ main{max-width:500px;padding:20px 16px 96px;}
       <div class="leader-main">
         <div>
           <div class="leader-team" id="current-leader">Memuatkan…</div>
-          <div class="leader-meta"><span id="current-points">–</span> PTS · <span id="hero-team-count">6</span> teams</div>
+          <div class="leader-meta"><span id="current-points">–</span> PTS</div>
         </div>
         <div class="leader-rank">
           <svg width="46" height="46" viewBox="0 0 24 24">
@@ -678,8 +694,10 @@ main{max-width:500px;padding:20px 16px 96px;}
   <!-- JADUAL -->
   <section class="panel" id="schedule">
     <div class="section-head">
-      <h2>Jadual program</h2>
-      <span>Ogos – Dis 2026</span>
+      <div>
+        <h2>Jadual program</h2>
+        <span class="schedule-subtitle">Ogos – Dis 2026</span>
+      </div>
     </div>
 
     <div class="game-card" data-date="2026-08-22">
@@ -687,7 +705,7 @@ main{max-width:500px;padding:20px 16px 96px;}
         <div class="game-no">1</div>
         <p class="game-name">Volleyball</p>
         <span class="game-date">22 Ogos</span>
-        <span class="status-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Selesai</span>
+        <span class="status-badge"></span>
       </div>
       <div class="game-details">
         <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Team – Male · Team Combine – Female</span></div>
@@ -704,7 +722,7 @@ main{max-width:500px;padding:20px 16px 96px;}
         <div class="game-no">2</div>
         <p class="game-name">Badminton</p>
         <span class="game-date">19 Sep</span>
-        <span class="status-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Selesai</span>
+        <span class="status-badge"></span>
       </div>
       <div class="game-details">
         <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Men Double – Open · Mix Double · Double-open (+Exec)</span></div>
@@ -720,7 +738,7 @@ main{max-width:500px;padding:20px 16px 96px;}
         <div class="game-no">3</div>
         <p class="game-name">Futsal &amp; Netball</p>
         <span class="game-date">10 Okt</span>
-        <span class="status-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Selesai</span>
+        <span class="status-badge"></span>
       </div>
       <div class="game-details">
         <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Futsal: Team – Male · Netball: Team Combine – Female</span></div>
@@ -737,7 +755,7 @@ main{max-width:500px;padding:20px 16px 96px;}
         <div class="game-no">4</div>
         <p class="game-name">Bowling</p>
         <span class="game-date">20 Nov</span>
-        <span class="status-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Selesai</span>
+        <span class="status-badge"></span>
       </div>
       <div class="game-details">
         <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Team</span></div>
@@ -754,7 +772,7 @@ main{max-width:500px;padding:20px 16px 96px;}
         <div class="game-no">5</div>
         <p class="game-name">Pickleball</p>
         <span class="game-date">12 Dis</span>
-        <span class="status-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Selesai</span>
+        <span class="status-badge"></span>
       </div>
       <div class="game-details">
         <div class="detail-row"><span class="label">Penyertaan</span><span class="value">Double – Male (2 wakil) · Double – Female (1 wakil) · Mix Double (1 wakil)</span></div>
@@ -853,13 +871,12 @@ main{max-width:500px;padding:20px 16px 96px;}
     </div>
 
     <div class="fr-part" id="fr-part-2">
-    <p class="fr-part-status" id="fr-status-2">Coming 2027</p>
+    <p class="fr-part-status" id="fr-status-2">Fun Race Part 2 · Coming 2027</p>
 
       <div class="task-card mystery">
         <video class="mystery-video" autoplay muted loop playsinline>
           <source src="task-funrace2-teaser.mp4" type="video/mp4">
         </video>
-        <p class="fr2-coming-text">Coming <span>2027</span></p>
       </div>
     </div>
 
@@ -962,15 +979,45 @@ main{max-width:500px;padding:20px 16px 96px;}
     btn.addEventListener('click', function(){ setTab(btn.dataset.tab); });
   });
 
-  // ---------- Auto-mark completed games based on today's date ----------
-  (function markCompletedGames(){
+  // ---------- Automatic schedule status ----------
+  // Before event date = Akan datang
+  // On event date      = Sedang berlangsung
+  // After event date   = Selesai
+  (function updateScheduleStatuses(){
     var today = new Date();
     today.setHours(0,0,0,0);
+
     document.querySelectorAll('.game-card[data-date]').forEach(function(card){
-      var d = new Date(card.getAttribute('data-date') + 'T00:00:00');
-      if(d <= today){
-        var badge = card.querySelector('.status-badge');
-        if(badge) badge.classList.add('show');
+      var eventDate = new Date(card.getAttribute('data-date') + 'T00:00:00');
+      var badge = card.querySelector('.status-badge');
+
+      card.classList.remove('status-upcoming', 'status-ongoing', 'status-completed');
+      if(badge){
+        badge.classList.remove('show', 'upcoming', 'ongoing', 'completed');
+        badge.innerHTML = '';
+      }
+
+      var status, label;
+      if(today < eventDate){
+        status = 'upcoming';
+        label = 'Akan datang';
+      } else if(today.getTime() === eventDate.getTime()){
+        status = 'ongoing';
+        label = 'Sedang berlangsung';
+      } else {
+        status = 'completed';
+        label = 'Selesai';
+      }
+
+      card.classList.add('status-' + status);
+
+      if(badge){
+        badge.classList.add('show', status);
+        if(status === 'completed'){
+          badge.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>' + label;
+        } else {
+          badge.innerHTML = '<span class="status-dot"></span>' + label;
+        }
       }
     });
   })();
@@ -1063,12 +1110,12 @@ main{max-width:500px;padding:20px 16px 96px;}
   var REFRESH_MS = 60000;
 
   var TEAM_META = {
-    'Obsidian Elite': { color:'#E8B923', group:'Kumpulan 1 · Gold + Black' },
-    'Red Gladiators': { color:'#D3372F', group:'Kumpulan 2 · Scarlet Red' },
-    'Onyx':           { color:'#1C1F2A', group:'Kumpulan 3 · Black' },
-    'Navy Titan':     { color:'#2C5FA8', group:'Kumpulan 4 · Navy Blue' },
-    'Pink Storm':     { color:'#C94F82', group:'Kumpulan 5 · Pink & Black' },
-    'Diamond X':      { color:'#8FA6C4', group:'Kumpulan 6 · White + Blue' }
+    'Obsidian Elite': { color:'#E8B923', group:'Gold + Black' },
+    'Red Gladiators': { color:'#D3372F', group:'Scarlet Red' },
+    'Onyx':           { color:'#1C1F2A', group:'Black' },
+    'Navy Titan':     { color:'#2C5FA8', group:'Navy Blue' },
+    'Pink Storm':     { color:'#C94F82', group:'Pink & Black' },
+    'Diamond X':      { color:'#8FA6C4', group:'White + Blue' }
   };
 
   function escapeHtml(str){
@@ -1079,8 +1126,6 @@ main{max-width:500px;padding:20px 16px 96px;}
 
   function renderLanes(standings){
     var lanesEl = document.getElementById('lanes');
-    document.getElementById('team-count').textContent = standings.length + ' pasukan';
-    document.getElementById('hero-team-count').textContent = standings.length;
     if(standings.length){
       document.getElementById('current-leader').textContent = standings[0].name;
       document.getElementById('current-points').textContent = standings[0].points === null ? '–' : standings[0].points;
