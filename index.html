@@ -1240,6 +1240,13 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     return d.innerHTML;
   }
 
+  function getTeamMeta(name){
+    if(TEAM_META[name]) return TEAM_META[name];
+    var normalized = name.trim().toLowerCase();
+    var key = Object.keys(TEAM_META).find(function(k){ return k.toLowerCase() === normalized; });
+    return key ? TEAM_META[key] : { color:'#6E6B60', group:'' };
+  }
+
   function renderLanes(standings){
     var lanesEl = document.getElementById('lanes');
     if(standings.length){
@@ -1257,7 +1264,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     var html = '';
     standings.forEach(function(team, i){
       var rank = i + 1;
-      var meta = TEAM_META[team.name] || { color:'#6E6B60', group:'' };
+      var meta = getTeamMeta(team.name);
       var hasScore = anyScored && team.points !== null;
       var rankClass = hasScore && rank <= 3 ? ' rank-' + rank : '';
       var ptsDisplay = team.points === null ? '–' : team.points;
@@ -1275,7 +1282,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
 
   function handleGvizResponse(resp){
     try{
-      var teamNames = resp.table.cols.slice(1).map(function(c){ return c.label || ''; });
+      var teamNames = resp.table.cols.slice(1).map(function(c){ return (c.label || '').trim(); });
 
       var dataRows = resp.table.rows.map(function(r){
         return r.c.map(function(cell){ return cell && cell.v !== null && cell.v !== undefined ? String(cell.v) : ''; });
