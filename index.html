@@ -210,6 +210,49 @@
     padding:10px 0 4px;
   }
 
+  /* ---------- Skeleton loading (shimmer) ---------- */
+  .skeleton{
+    background:linear-gradient(90deg, var(--line) 25%, rgba(255,255,255,0.65) 50%, var(--line) 75%);
+    background-size:200% 100%;
+    animation:skeletonShimmer 1.5s ease-in-out infinite;
+    border-radius:5px;
+  }
+  .skeleton.on-dark{
+    background:linear-gradient(90deg, rgba(255,255,255,.10) 25%, rgba(255,255,255,.26) 50%, rgba(255,255,255,.10) 75%);
+    background-size:200% 100%;
+  }
+  @keyframes skeletonShimmer{
+    0%{background-position:200% 0;}
+    100%{background-position:-200% 0;}
+  }
+  .skel-lane{display:flex; align-items:center; gap:12px; padding:13px 14px; margin-bottom:7px; border-radius:12px; border:1px solid var(--line);}
+  .skel-circle{width:30px; height:30px; border-radius:50%; flex-shrink:0;}
+  .skel-lines{flex:1; display:flex; flex-direction:column; gap:6px;}
+  .skel-line{height:10px;}
+  .skel-pts{width:26px; height:16px; flex-shrink:0;}
+  .skel-row{height:13px; margin-bottom:10px;}
+  .skel-row:last-child{margin-bottom:0;}
+  .skel-tile{aspect-ratio:1; border-radius:10px;}
+
+  /* ---------- Empty / pending states ---------- */
+  .empty-state{
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    padding:32px 16px; color:var(--muted); text-align:center;
+  }
+  .empty-state svg{opacity:0.42;}
+  .empty-state p{font-size:12.5px; max-width:220px; line-height:1.5;}
+  .empty-state-sm{
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    padding:16px 10px; color:var(--muted); text-align:center;
+  }
+  .empty-state-sm svg{opacity:0.4;}
+  .empty-state-sm p{font-size:12px;}
+
+  html[data-theme="dark"] .skeleton{
+    background:linear-gradient(90deg, rgba(255,255,255,.05) 25%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.05) 75%);
+    background-size:200% 100%;
+  }
+
   /* ---------- Schedule (game cards) ---------- */
   .game-card{
     background:var(--paper);
@@ -756,7 +799,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       <div class="leader-label">CURRENT LEADER</div>
       <div class="leader-main">
         <div>
-          <div class="leader-team" id="current-leader">Memuatkan…</div>
+          <div class="leader-team" id="current-leader"><span class="skeleton on-dark" style="display:inline-block; width:130px; height:22px; vertical-align:middle;"></span></div>
           <div class="leader-meta"><span id="current-points">–</span> PTS</div>
         </div>
         <div class="leader-rank">
@@ -778,7 +821,10 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     </div>
 
     <div id="lanes">
-      <p class="updated-note">Memuatkan markah terkini…</p>
+      <div class="skel-lane"><div class="skeleton skel-circle"></div><div class="skel-lines"><div class="skeleton skel-line" style="width:55%;"></div><div class="skeleton skel-line" style="width:32%;"></div></div><div class="skeleton skel-pts"></div></div>
+      <div class="skel-lane"><div class="skeleton skel-circle"></div><div class="skel-lines"><div class="skeleton skel-line" style="width:48%;"></div><div class="skeleton skel-line" style="width:30%;"></div></div><div class="skeleton skel-pts"></div></div>
+      <div class="skel-lane"><div class="skeleton skel-circle"></div><div class="skel-lines"><div class="skeleton skel-line" style="width:60%;"></div><div class="skeleton skel-line" style="width:28%;"></div></div><div class="skeleton skel-pts"></div></div>
+      <div class="skel-lane"><div class="skeleton skel-circle"></div><div class="skel-lines"><div class="skeleton skel-line" style="width:42%;"></div><div class="skeleton skel-line" style="width:34%;"></div></div><div class="skeleton skel-pts"></div></div>
     </div>
 
     <p class="updated-note" id="updated-note">&nbsp;</p>
@@ -932,7 +978,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
         </div>
       </div>
       <div class="task-body">
-        <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
+        <div class="detail-row"><span class="label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px; margin-right:3px;"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.5 4.5"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L12.5 19.5"/></svg>Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
       </div>
     </div>
 
@@ -943,7 +989,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
         <span class="game-date" title="Sebelum 12:00 tengah malam pada hari acara CSR dijalankan"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Hari CSR</span>
       </div>
       <div class="task-body">
-        <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
+        <div class="detail-row"><span class="label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px; margin-right:3px;"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.5 4.5"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L12.5 19.5"/></svg>Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
       </div>
     </div>
 
@@ -954,7 +1000,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
         <span class="game-date"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>31 Dis 2026</span>
       </div>
       <div class="task-body">
-        <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
+        <div class="detail-row"><span class="label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px; margin-right:3px;"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.5 4.5"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L12.5 19.5"/></svg>Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
       </div>
     </div>
 
@@ -965,7 +1011,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
         <span class="game-date"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>31 Dis 2026</span>
       </div>
       <div class="task-body">
-        <div class="detail-row"><span class="label">🔗 Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
+        <div class="detail-row"><span class="label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px; margin-right:3px;"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.5 4.5"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L12.5 19.5"/></svg>Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
       </div>
     </div>
 
@@ -997,9 +1043,14 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
   <section class="panel" id="gallery">
     <div class="section-head">
       <h2>Galeri acara</h2>
-      <span id="gallery-count">Memuatkan…</span>
+      <span id="gallery-count"><span class="skeleton" style="display:inline-block; width:56px; height:11px; vertical-align:middle;"></span></span>
     </div>
-    <div class="gallery-grid" id="gallery-grid"></div>
+    <div class="gallery-grid" id="gallery-grid">
+      <div class="skeleton skel-tile"></div>
+      <div class="skeleton skel-tile"></div>
+      <div class="skeleton skel-tile"></div>
+      <div class="skeleton skel-tile"></div>
+    </div>
   </section>
 
   <div class="lightbox" id="lightbox">
@@ -1255,7 +1306,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     }
 
     if(!standings.length){
-      lanesEl.innerHTML = '<p class="updated-note">Tiada pasukan dijumpai dalam sheet.</p>';
+      lanesEl.innerHTML = '<div class="empty-state"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><p>Tiada pasukan dijumpai dalam sheet.</p></div>';
       return;
     }
 
@@ -1312,7 +1363,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
         'Dikemaskini ' + now.toLocaleTimeString('ms-MY', { hour:'2-digit', minute:'2-digit' }) + ' · auto-refresh setiap 60 saat';
     }catch(err){
       document.getElementById('lanes').innerHTML =
-        '<p class="updated-note">Tak dapat tarik data terkini. Cuba refresh halaman ini.</p>';
+        '<div class="empty-state"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>Tak dapat tarik data terkini. Cuba refresh halaman ini.</p></div>';
       console.error(err);
     }
   }
@@ -1327,7 +1378,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       '/gviz/tq?gid=' + SHEET_GID + '&headers=1&tqx=out:json;responseHandler:handleGvizResponse&_=' + Date.now();
     script.onerror = function(){
       document.getElementById('lanes').innerHTML =
-        '<p class="updated-note">Tak dapat tarik data terkini. Cuba refresh halaman ini.</p>';
+        '<div class="empty-state"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>Tak dapat tarik data terkini. Cuba refresh halaman ini.</p></div>';
     };
     document.body.appendChild(script);
   }
@@ -1351,7 +1402,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     });
 
     if(!rows.length){
-      panelEl.innerHTML = '<p class="result-note">Keputusan belum tersedia lagi.</p>';
+      panelEl.innerHTML = '<div class="empty-state-sm"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 2h6v3H9z"/><path d="M9 11h6M9 15h4"/></svg><p>Keputusan belum tersedia lagi.</p></div>';
       return;
     }
 
@@ -1385,7 +1436,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       return;
     }
 
-    body.innerHTML = '<p class="result-note">Memuatkan…</p>';
+    body.innerHTML = '<div class="skeleton skel-row"></div><div class="skeleton skel-row"></div><div class="skeleton skel-row" style="width:70%;"></div>';
 
     var callbackName = 'gvizResult_' + gid;
     window[callbackName] = function(resp){
@@ -1398,7 +1449,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     script.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
       '/gviz/tq?gid=' + gid + '&tqx=out:json;responseHandler:' + callbackName + '&_=' + Date.now();
     script.onerror = function(){
-      body.innerHTML = '<p class="result-note">Tak dapat tarik keputusan. Cuba lagi.</p>';
+      body.innerHTML = '<div class="empty-state-sm"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>Tak dapat tarik keputusan. Cuba lagi.</p></div>';
     };
     document.body.appendChild(script);
   }
@@ -1452,8 +1503,9 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       var photos = galleryGroups[game] || [];
       var thumb = photos.length ? driveLinkToDirect(photos[0].link) : '';
       var bg = thumb ? "background-image:url('" + thumb.replace(/'/g, '%27') + "');" : '';
+      var emptyIcon = photos.length ? '' : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="opacity:0.55; margin-bottom:4px;"><path d="M3 3l18 18"/><path d="M10.5 5H14l1.5 2H19a2 2 0 0 1 2 2v9.5"/><path d="M21 16.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1"/><circle cx="12" cy="13" r="3.2"/></svg>';
       html += '<button type="button" class="gallery-tile" style="' + bg + '" ' + (photos.length ? 'onclick="openLightbox(\'' + game.replace(/'/g,"\\'") + '\')"' : 'disabled') + '>';
-      html += '  <span class="tile-text"><span class="tile-name">' + escapeHtmlGeneric(game) + '</span><span class="tile-count">' + (photos.length ? photos.length + ' gambar' : 'Belum ada gambar') + '</span></span>';
+      html += '  <span class="tile-text">' + emptyIcon + '<span class="tile-name">' + escapeHtmlGeneric(game) + '</span><span class="tile-count">' + (photos.length ? photos.length + ' gambar' : 'Belum ada gambar') + '</span></span>';
       html += '</button>';
     });
     grid.innerHTML = html;
