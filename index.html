@@ -463,22 +463,32 @@
   }
   .result-panel.open{display:block;}
   .result-scroll{width:100%; max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;}
-  .result-panel table, .results-modal-body table{width:100%; min-width:100%; border-collapse:collapse; font-size:12.5px; table-layout:auto;}
-  .result-panel th, .results-modal-body th{
+  .result-panel table, .results-modal-body table, .score-table{width:100%; min-width:100%; border-collapse:collapse; font-size:12.5px; table-layout:auto;}
+  .result-panel th, .results-modal-body th, .score-table th{
     text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:0.02em;
     color:var(--muted); font-weight:600; padding:5px 6px; border-bottom:1px solid var(--line);
     white-space:nowrap;
   }
-  .result-panel td, .results-modal-body td{
+  .result-panel td, .results-modal-body td, .score-table td{
     padding:7px 8px; border-bottom:1px solid var(--line); color:var(--ink);
     overflow-wrap:break-word; max-width:170px;
   }
-  .result-panel td:first-child, .results-modal-body td:first-child{
+  .result-panel td:first-child, .results-modal-body td:first-child, .score-table td:first-child{
     min-width:110px; font-weight:600; white-space:normal;
   }
-  .result-panel th:first-child, .results-modal-body th:first-child{
+  .result-panel th:first-child, .results-modal-body th:first-child, .score-table th:first-child{
     min-width:110px;
   }
+  .score-table th:not(:first-child), .score-table td:not(:first-child){
+    text-align:center; min-width:38px;
+  }
+  .score-table td:first-child{font-weight:500;}
+  .score-table .score-sport-row td{
+    background:var(--surface-2, #F1EFE8);
+    font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.03em;
+    color:var(--ink); padding:6px 8px; border-bottom:1px solid var(--line);
+  }
+  html[data-theme="dark"] .score-table .score-sport-row td{background:rgba(255,255,255,0.06);}
   .result-panel tr:last-child td, .results-modal-body tr:last-child td{border-bottom:none;}
   .result-note{font-size:12.5px; color:var(--muted); font-style:italic; text-align:center; padding:6px 0;}
 
@@ -1085,14 +1095,45 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       <p>Butiran lengkap (tarikh, lokasi dan kenalan urusetia) akan dikemaskini di sini tidak lama lagi.</p>
     </div>
 
-    <div class="info-card">
+    <div class="info-card game-card score-card">
       <h3>Sistem markah</h3>
-      <p>Sistem pengiraan markah akan diumumkan sebelum acara pertama bermula.</p>
-    </div>
+      <div class="game-details score-body">
+      <p style="margin-bottom:10px;">Markah diberi ikut kedudukan (1st–6th) untuk setiap kategori sukan seperti berikut:</p>
+      <div class="result-scroll">
+        <table class="score-table">
+          <thead>
+            <tr><th>Kategori</th><th>1st</th><th>2nd</th><th>3rd</th><th>4th</th><th>5th</th><th>6th</th></tr>
+          </thead>
+          <tbody>
+            <tr class="score-sport-row"><td colspan="7">Volleyball</td></tr>
+            <tr><td>Team (M)</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr>
+            <tr><td>Team (F)</td><td>2</td><td>0</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
 
-    <div class="info-card">
-      <h3>Peraturan am</h3>
-      <p>Peraturan am akan dikongsikan bersama semua peserta tidak lama lagi.</p>
+            <tr class="score-sport-row"><td colspan="7">Badminton</td></tr>
+            <tr><td>Men Double</td><td>3</td><td>2</td><td>1</td><td>0.5</td><td>0</td><td>0</td></tr>
+            <tr><td>Double Open (Exec)</td><td>3</td><td>2</td><td>1</td><td>0.5</td><td>0</td><td>0</td></tr>
+            <tr><td>Mix Double</td><td>3</td><td>2</td><td>1</td><td>0.5</td><td>0</td><td>0</td></tr>
+
+            <tr class="score-sport-row"><td colspan="7">Futsal &amp; Netball</td></tr>
+            <tr><td>Futsal – Team (M)</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr>
+            <tr><td>Futsal – Top Scorer</td><td>1</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+            <tr><td>Netball – Team (F)</td><td>2</td><td>0</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+
+            <tr class="score-sport-row"><td colspan="7">Bowling</td></tr>
+            <tr><td>Team</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr>
+            <tr><td>High Series (M)</td><td>3</td><td>2</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>High Series (F)</td><td>3</td><td>2</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>High Game (M)</td><td>1</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+            <tr><td>High Game (F)</td><td>1</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+
+            <tr class="score-sport-row"><td colspan="7">Pickleball</td></tr>
+            <tr><td>Male Double</td><td>3</td><td>2</td><td>1</td><td>0.5</td><td>0</td><td>0</td></tr>
+            <tr><td>Mix Double</td><td>3</td><td>2</td><td>1</td><td>0.5</td><td>0</td><td>0</td></tr>
+            <tr><td>Female Double</td><td>3</td><td>2</td><td>1</td><td>0.5</td><td>0</td><td>0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      </div>
     </div>
   </section>
 
