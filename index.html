@@ -288,6 +288,7 @@
   .status-badge.upcoming{color:#666963; background:#ECECE8;}
   .status-badge.ongoing{color:#9A6500; background:#FFF0C8; border:1px solid #F1D58A;}
   .status-badge.completed{color:#4F7658; background:#E5EEE7;}
+  .status-badge.soon{color:#B3401E; background:#FDE4DA; border:1px solid #F5C1AB;}
   .status-badge .status-dot{
     width:6px; height:6px; border-radius:50%;
     display:inline-block; background:currentColor;
@@ -311,6 +312,10 @@
   .game-card.status-completed .game-no{background:#5B8765; color:#fff;}
   .game-card.status-ongoing .game-date{color:#9A6500; background:rgba(244,181,42,.16);}
   .game-card.status-completed .game-date{color:#5F655F; background:rgba(91,135,101,.10);}
+  .game-card.status-soon{background:#FEF3EF; border-color:#F5C1AB; box-shadow:0 4px 14px rgba(179,64,30,.08);}
+  .game-card.status-soon::before{background:#E85A2E;}
+  .game-card.status-soon .game-no{background:#E85A2E; color:#fff;}
+  .game-card.status-soon .game-date{color:#B3401E; background:rgba(232,90,46,.12);}
 
   .schedule-subtitle{display:block; margin-top:3px; color:var(--muted); font-size:10.5px;}
   .schedule-note{
@@ -743,6 +748,11 @@ html[data-theme="dark"] .game-card.status-ongoing .game-no{background:#F4B52A; c
 html[data-theme="dark"] .game-card.status-completed .game-no{background:#5B8765; color:#0D160F;}
 html[data-theme="dark"] .game-card.status-ongoing .game-date{color:#FFD98C; background:rgba(244,181,42,.16);}
 html[data-theme="dark"] .game-card.status-completed .game-date{color:#8FCF9F; background:rgba(91,135,101,.16);}
+html[data-theme="dark"] .game-card.status-soon{background:#2A1710; border-color:#5C2E18; box-shadow:none;}
+html[data-theme="dark"] .game-card.status-soon::before{background:#E85A2E;}
+html[data-theme="dark"] .game-card.status-soon .game-no{background:#E85A2E; color:#2A0D02;}
+html[data-theme="dark"] .game-card.status-soon .game-date{color:#FFAB8A; background:rgba(232,90,46,.16);}
+html[data-theme="dark"] .status-badge.soon{color:#FFAB8A; background:rgba(232,90,46,.16); border-color:rgba(232,90,46,.35);}
 html[data-theme="dark"] .status-badge.upcoming{color:var(--muted); background:rgba(255,255,255,0.06);}
 html[data-theme="dark"] .status-badge.ongoing{color:#FFD98C; background:rgba(244,181,42,.14); border-color:rgba(244,181,42,.35);}
 html[data-theme="dark"] .status-badge.completed{color:#8FCF9F; background:rgba(91,135,101,.16);}
@@ -1115,7 +1125,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
             <tr><td>Mix Double</td><td>3</td><td>2</td><td>1</td><td>0.5</td><td>0</td><td>0</td></tr>
 
             <tr class="score-sport-row"><td colspan="7">Futsal &amp; Netball</td></tr>
-            <tr><td>Futsal – Team (M)</td><td>5</td><td>4</td><td>3</td><td>2</td><td>0</td><td>0</td></tr>
+            <tr><td>Futsal – Team (M)</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td><td>0</td></tr>
             <tr><td>Futsal – Top Scorer</td><td>1</td><td>–</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
             <tr><td>Netball – Team (F)</td><td>2</td><td>0</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
 
@@ -1190,21 +1200,28 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     var today = new Date();
     today.setHours(0,0,0,0);
     var anyOngoing = false;
+    var COUNTDOWN_THRESHOLD_DAYS = 3;
 
     document.querySelectorAll('.game-card[data-date]').forEach(function(card){
       var eventDate = new Date(card.getAttribute('data-date') + 'T00:00:00');
       var badge = card.querySelector('.status-badge');
+      var daysUntil = Math.round((eventDate - today) / 86400000);
 
-      card.classList.remove('status-upcoming', 'status-ongoing', 'status-completed');
+      card.classList.remove('status-upcoming', 'status-ongoing', 'status-completed', 'status-soon');
       if(badge){
-        badge.classList.remove('show', 'upcoming', 'ongoing', 'completed');
+        badge.classList.remove('show', 'upcoming', 'ongoing', 'completed', 'soon');
         badge.innerHTML = '';
       }
 
       var status, label;
       if(today < eventDate){
-        status = 'upcoming';
-        label = 'Akan datang';
+        if(daysUntil <= COUNTDOWN_THRESHOLD_DAYS){
+          status = 'soon';
+          label = daysUntil === 1 ? 'Esok!' : 'H-' + daysUntil;
+        } else {
+          status = 'upcoming';
+          label = 'Akan datang';
+        }
       } else if(today.getTime() === eventDate.getTime()){
         status = 'ongoing';
         label = 'Sedang berlangsung';
@@ -1220,6 +1237,8 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
         badge.classList.add('show', status);
         if(status === 'completed'){
           badge.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>' + label;
+        } else if(status === 'soon'){
+          badge.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>' + label;
         } else {
           badge.innerHTML = '<span class="status-dot"></span>' + label;
         }
