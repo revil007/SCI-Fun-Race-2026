@@ -666,12 +666,12 @@ main{max-width:500px;padding:20px 16px 96px;}
 .leader-hero{background:linear-gradient(135deg,#132A4C 0%,#1A3B68 100%);color:#fff;border-radius:16px;padding:17px 17px 19px;margin:0 0 18px;box-shadow:0 8px 24px rgba(16,35,63,.12);overflow:hidden;position:relative;}
 .leader-hero:after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;right:-75px;top:-90px;background:rgba(244,181,42,.10);}
 .leader-label{font-size:9px;letter-spacing:.18em;font-weight:700;color:#B8C3D0;margin-bottom:8px;position:relative;}
-.leader-main{display:flex;align-items:flex-end;justify-content:space-between;position:relative;z-index:1;}
+.leader-main{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;padding-right:78px;}
 .leader-team{font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:25px;letter-spacing:.02em;line-height:1.05;}
 .leader-meta{font-size:10.5px;color:#C2CBD5;margin-top:6px;}
 .leader-meta #current-points{font-family:'JetBrains Mono',monospace;color:#F4B52A;font-weight:700;}
-.leader-rank{color:var(--amber);opacity:.95;flex-shrink:0;}
-.leader-rank svg{filter:drop-shadow(0 3px 8px rgba(244,181,42,.4));}
+.leader-rank{color:var(--amber);opacity:.95;flex-shrink:0;position:absolute;right:12px;top:50%;transform:translateY(-50%);}
+.leader-rank video{width:64px;height:64px;display:block;filter:drop-shadow(0 3px 10px rgba(244,181,42,.45));}
 .lane{border-left:3px solid var(--team);border-radius:12px;padding:13px 14px;margin-bottom:7px;box-shadow:none;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
 .lane.rank-1{background:linear-gradient(90deg,#FFF8E8 0%,#fff 65%);border-top-color:#F0E4C7;border-right-color:#F0E4C7;border-bottom-color:#F0E4C7;}
 .lane.rank-2{background:linear-gradient(90deg,#F2F4F5 0%,#fff 65%);border-top-color:#DEE2E5;border-right-color:#DEE2E5;border-bottom-color:#DEE2E5;}
@@ -823,19 +823,9 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
           <div class="leader-meta"><span id="current-points">–</span> PTS</div>
         </div>
         <div class="leader-rank">
-          <svg width="46" height="46" viewBox="0 0 24 24">
-            <defs>
-              <linearGradient id="trophyGoldGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#FFE9B0"/>
-                <stop offset="50%" stop-color="#F4B52A"/>
-                <stop offset="100%" stop-color="#C6821A"/>
-              </linearGradient>
-            </defs>
-            <circle cx="12" cy="12" r="11.5" fill="rgba(244,181,42,0.14)"/>
-            <path d="M8 21h8M12 17v4" stroke="url(#trophyGoldGrad)" stroke-width="1.6" stroke-linecap="round"/>
-            <path d="M7 4h10v4a5 5 0 0 1-10 0V4z" fill="url(#trophyGoldGrad)" stroke="#9C650F" stroke-width="0.3"/>
-            <path d="M7 5H4.3a2.7 2.7 0 0 0 2.7 2.7M17 5h2.7A2.7 2.7 0 0 1 17 7.7" fill="none" stroke="url(#trophyGoldGrad)" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>
+          <video autoplay muted loop playsinline>
+            <source src="trophy-3d.webm" type="video/webm">
+          </video>
         </div>
       </div>
     </div>
