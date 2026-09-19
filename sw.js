@@ -1,4 +1,4 @@
-const CACHE_NAME = 'telematch-portal-v1';
+const CACHE_NAME = 'telematch-portal-v2';
 const CORE_ASSETS = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', function(event){
@@ -24,8 +24,13 @@ self.addEventListener('activate', function(event){
 
 // Network-first for navigation/data so live scores/results stay fresh;
 // fall back to cache only if offline.
+// IMPORTANT: only handle same-origin requests. Cross-origin calls (e.g. the
+// JSONP <script> requests to Google Sheets for standings/results/gallery)
+// must pass straight through untouched — intercepting them here can break
+// or silently fail those opaque cross-origin responses.
 self.addEventListener('fetch', function(event){
   if(event.request.method !== 'GET') return;
+  if(new URL(event.request.url).origin !== self.location.origin) return;
   event.respondWith(
     fetch(event.request)
       .then(function(response){

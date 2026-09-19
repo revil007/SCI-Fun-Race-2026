@@ -574,12 +574,13 @@
   .lightbox-stage img.panning{cursor:grabbing; transition:none;}
   .lightbox-nav-btn{
     position:absolute; top:50%; transform:translateY(-50%);
-    background:rgba(255,255,255,0.12); border:none; color:#fff;
+    background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.25); color:#fff;
     width:36px; height:36px; border-radius:50%; font-size:18px;
     display:flex; align-items:center; justify-content:center; cursor:pointer;
+    box-shadow:0 2px 8px rgba(0,0,0,0.35); z-index:5;
   }
-  .lightbox-nav-btn.prev{left:0;}
-  .lightbox-nav-btn.next{right:0;}
+  .lightbox-nav-btn.prev{left:6px;}
+  .lightbox-nav-btn.next{right:6px;}
   .lightbox-caption{
     color:#fff; font-size:13px; text-align:center; margin-top:12px; min-height:18px;
     max-width:480px;
@@ -1453,32 +1454,6 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     return d.innerHTML;
   }
 
-  function parseCsvLine(text){
-    // Minimal RFC4180-style CSV parser: handles quoted fields with embedded commas/newlines/escaped quotes.
-    var rows = [];
-    var row = [];
-    var field = '';
-    var inQuotes = false;
-    for(var i = 0; i < text.length; i++){
-      var c = text[i];
-      if(inQuotes){
-        if(c === '"'){
-          if(text[i + 1] === '"'){ field += '"'; i++; }
-          else { inQuotes = false; }
-        } else {
-          field += c;
-        }
-      } else {
-        if(c === '"'){ inQuotes = true; }
-        else if(c === ','){ row.push(field); field = ''; }
-        else if(c === '\n'){ row.push(field); rows.push(row); row = []; field = ''; }
-        else if(c === '\r'){ /* skip */ }
-        else { field += c; }
-      }
-    }
-    if(field.length || row.length){ row.push(field); rows.push(row); }
-    return rows;
-  }
 
   function renderResultTable(panelEl, rows){
     rows = rows.filter(function(r){
@@ -1510,6 +1485,25 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     panelEl.innerHTML = html;
   }
 
+  function gvizTableToRows(table){
+    var headerRow = table.cols.map(function(c){ return c.label || ''; });
+    var rows = [headerRow];
+    table.rows.forEach(function(r){
+      var rowVals = r.c.map(function(cell){
+        if(!cell) return '';
+        // Google's gviz sometimes nulls out .v when a column's inferred type
+        // (e.g. numeric, from other rows) doesn't match this cell's actual
+        // content (e.g. a team name). The formatted display value .f often
+        // still holds the original text even when .v has been nulled.
+        if(cell.f !== undefined && cell.f !== null && cell.f !== '') return cell.f;
+        if(cell.v !== undefined && cell.v !== null) return String(cell.v);
+        return '';
+      });
+      rows.push(rowVals);
+    });
+    return rows;
+  }
+
   function openResultsModal(gid, gameName){
     var modal = document.getElementById('results-modal');
     var body = document.getElementById('results-modal-body');
@@ -1523,73 +1517,20 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
 
     body.innerHTML = '<div class="skeleton skel-row"></div><div class="skeleton skel-row"></div><div class="skeleton skel-row" style="width:70%;"></div>';
 
-    // Use Google Visualization JSONP instead of fetch(CSV).
-    // JSONP works when this HTML is opened directly as file:// and avoids CORS issues.
-    var callbackName = 'resultGviz_' + String(gid).replace(/[^0-9A-Za-z_]/g, '_') + '_' + Date.now();
-    var script = document.createElement('script');
-    var finished = false;
-
-    function cleanup(){
-      finished = true;
-      try{ delete window[callbackName]; }catch(e){ window[callbackName] = undefined; }
-      if(script.parentNode) script.parentNode.removeChild(script);
-    }
-
+    var callbackName = 'gvizResult_' + gid;
     window[callbackName] = function(resp){
-      if(finished) return;
-      try{
-        if(!resp || !resp.table || !resp.table.cols){
-          throw new Error('Format data Google Sheet tidak sah');
-        }
-
-        var cols = resp.table.cols.map(function(c){
-          return c && c.label ? String(c.label) : '';
-        });
-
-        var rows = [cols];
-        (resp.table.rows || []).forEach(function(r){
-          var values = [];
-          for(var i = 0; i < cols.length; i++){
-            var cell = r && r.c ? r.c[i] : null;
-            values.push(cell && cell.v !== null && cell.v !== undefined ? String(cell.v) : '');
-          }
-          rows.push(values);
-        });
-
-        // Remove completely blank trailing columns/rows while keeping the header.
-        while(rows.length > 1 && rows[rows.length - 1].every(function(v){ return !String(v).trim(); })){
-          rows.pop();
-        }
-        var lastCol = rows.reduce(function(max, row){
-          for(var i=row.length-1; i>=0; i--){
-            if(String(row[i] || '').trim()) return Math.max(max, i+1);
-          }
-          return max;
-        }, 0);
-        if(lastCol > 0){
-          rows = rows.map(function(row){ return row.slice(0, lastCol); });
-        }
-
-        resultCache[gid] = rows;
-        renderResultTable(body, rows);
-      }catch(err){
-        body.innerHTML = '<div class="empty-state-sm"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>Tak dapat tarik keputusan. Cuba lagi.</p></div>';
-        console.error('Keputusan ' + gameName + ':', err);
-      }finally{
-        cleanup();
-      }
+      var rows = gvizTableToRows(resp.table);
+      resultCache[gid] = rows;
+      renderResultTable(body, rows);
+      delete window[callbackName];
     };
 
-    script.onerror = function(){
-      if(finished) return;
-      body.innerHTML = '<div class="empty-state-sm"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>Tak dapat tarik keputusan. Cuba lagi.</p></div>';
-      console.error('Google Sheets JSONP gagal untuk', gameName, 'gid:', gid);
-      cleanup();
-    };
-
+    var script = document.createElement('script');
     script.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
-      '/gviz/tq?gid=' + encodeURIComponent(gid) +
-      '&headers=1&tqx=out:json;responseHandler:' + callbackName + '&_=' + Date.now();
+      '/gviz/tq?gid=' + gid + '&headers=1&tqx=out:json;responseHandler:' + callbackName + '&_=' + Date.now();
+    script.onerror = function(){
+      body.innerHTML = '<div class="empty-state-sm"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>Tak dapat tarik keputusan. Cuba lagi.</p></div>';
+    };
     document.body.appendChild(script);
   }
   window.openResultsModal = openResultsModal;
