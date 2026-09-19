@@ -574,13 +574,12 @@
   .lightbox-stage img.panning{cursor:grabbing; transition:none;}
   .lightbox-nav-btn{
     position:absolute; top:50%; transform:translateY(-50%);
-    background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.25); color:#fff;
+    background:rgba(255,255,255,0.12); border:none; color:#fff;
     width:36px; height:36px; border-radius:50%; font-size:18px;
     display:flex; align-items:center; justify-content:center; cursor:pointer;
-    box-shadow:0 2px 8px rgba(0,0,0,0.35); z-index:5;
   }
-  .lightbox-nav-btn.prev{left:6px;}
-  .lightbox-nav-btn.next{right:6px;}
+  .lightbox-nav-btn.prev{left:0;}
+  .lightbox-nav-btn.next{right:0;}
   .lightbox-caption{
     color:#fff; font-size:13px; text-align:center; margin-top:12px; min-height:18px;
     max-width:480px;
@@ -1445,18 +1444,25 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
   loadStandings();
   setInterval(loadStandings, REFRESH_MS);
 
-  // ---------- Per-game results panel (inline, styled — not raw Sheets UI) ----------
+  // ---------- Per-game results panel (Google Sheets GViz — live, no CORS fetch) ----------
   var resultCache = {};
+  var resultRequestSeq = 0;
 
   function escapeHtmlGeneric(str){
     var d = document.createElement('div');
-    d.textContent = str;
+    d.textContent = str == null ? '' : String(str);
     return d.innerHTML;
   }
 
+  function gvizCellValue(cell){
+    if(!cell) return '';
+    if(cell.f !== undefined && cell.f !== null) return String(cell.f);
+    if(cell.v !== undefined && cell.v !== null) return String(cell.v);
+    return '';
+  }
 
   function renderResultTable(panelEl, rows){
-    rows = rows.filter(function(r){
+    rows = (rows || []).filter(function(r){
       return r.some(function(v){ return v !== null && v !== undefined && String(v).trim() !== ''; });
     });
 
@@ -1465,43 +1471,26 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       return;
     }
 
+    var maxCols = rows.reduce(function(m, r){ return Math.max(m, r.length); }, 0);
+    rows = rows.map(function(r){
+      var copy = r.slice();
+      while(copy.length < maxCols) copy.push('');
+      return copy;
+    });
+
     var cols = rows[0];
     var dataRows = rows.slice(1);
-    var hasHeaders = cols.some(function(c){ return c && c.trim() !== ''; });
-
     var html = '<div class="result-scroll"><table><thead><tr>';
-    if(hasHeaders){
-      cols.forEach(function(c){ html += '<th>' + escapeHtmlGeneric(c) + '</th>'; });
-    }
+    cols.forEach(function(c){ html += '<th>' + escapeHtmlGeneric(c) + '</th>'; });
     html += '</tr></thead><tbody>';
+
     dataRows.forEach(function(r){
       html += '<tr>';
-      r.forEach(function(v){
-        html += '<td>' + escapeHtmlGeneric(String(v || '')) + '</td>';
-      });
+      r.forEach(function(v){ html += '<td>' + escapeHtmlGeneric(v) + '</td>'; });
       html += '</tr>';
     });
     html += '</tbody></table></div>';
     panelEl.innerHTML = html;
-  }
-
-  function gvizTableToRows(table){
-    var headerRow = table.cols.map(function(c){ return c.label || ''; });
-    var rows = [headerRow];
-    table.rows.forEach(function(r){
-      var rowVals = r.c.map(function(cell){
-        if(!cell) return '';
-        // Google's gviz sometimes nulls out .v when a column's inferred type
-        // (e.g. numeric, from other rows) doesn't match this cell's actual
-        // content (e.g. a team name). The formatted display value .f often
-        // still holds the original text even when .v has been nulled.
-        if(cell.f !== undefined && cell.f !== null && cell.f !== '') return cell.f;
-        if(cell.v !== undefined && cell.v !== null) return String(cell.v);
-        return '';
-      });
-      rows.push(rowVals);
-    });
-    return rows;
   }
 
   function openResultsModal(gid, gameName){
@@ -1510,28 +1499,70 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     document.getElementById('results-modal-title').textContent = gameName + ' — Keputusan';
     modal.classList.add('open');
 
-    if(resultCache[gid]){
-      renderResultTable(body, resultCache[gid]);
-      return;
-    }
-
+    // Do not keep old results forever. Each click gets the current Google Sheet data.
     body.innerHTML = '<div class="skeleton skel-row"></div><div class="skeleton skel-row"></div><div class="skeleton skel-row" style="width:70%;"></div>';
 
-    var callbackName = 'gvizResult_' + gid;
+    var requestId = ++resultRequestSeq;
+    var callbackName = '__gvizResult_' + Date.now() + '_' + requestId;
+    var scriptId = 'gviz-result-' + requestId;
+    var oldScript = document.getElementById(scriptId);
+    if(oldScript) oldScript.remove();
+
+    var finished = false;
+    var cleanup = function(){
+      var s = document.getElementById(scriptId);
+      if(s) s.remove();
+      try { delete window[callbackName]; } catch(e) { window[callbackName] = undefined; }
+    };
+
     window[callbackName] = function(resp){
-      var rows = gvizTableToRows(resp.table);
-      resultCache[gid] = rows;
-      renderResultTable(body, rows);
-      delete window[callbackName];
+      if(finished) return;
+      finished = true;
+      try{
+        if(!resp || !resp.table) throw new Error('Respons Google Sheets tidak sah');
+        if(resp.table.cols && resp.table.cols.length === 0){
+          renderResultTable(body, []);
+          return;
+        }
+
+        var rows = (resp.table.rows || []).map(function(row){
+          var cells = row && row.c ? row.c : [];
+          return cells.map(gvizCellValue);
+        });
+
+        resultCache[gid] = rows;
+        renderResultTable(body, rows);
+      }catch(err){
+        body.innerHTML = '<div class="empty-state-sm"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>Data keputusan tidak dapat dibaca. Cuba lagi.</p></div>';
+        console.error('GViz result error:', err, resp);
+      }finally{
+        cleanup();
+      }
     };
 
     var script = document.createElement('script');
+    script.id = scriptId;
+    script.async = true;
     script.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
-      '/gviz/tq?gid=' + gid + '&headers=1&tqx=out:json;responseHandler:' + callbackName + '&_=' + Date.now();
+      '/gviz/tq?gid=' + encodeURIComponent(gid) +
+      '&headers=0&tqx=out:json;responseHandler=' + callbackName + '&_=' + Date.now();
+
     script.onerror = function(){
-      body.innerHTML = '<div class="empty-state-sm"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>Tak dapat tarik keputusan. Cuba lagi.</p></div>';
+      if(finished) return;
+      finished = true;
+      body.innerHTML = '<div class="empty-state-sm"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>Tak dapat sambung ke Google Sheets. Cuba lagi.</p></div>';
+      cleanup();
     };
+
     document.body.appendChild(script);
+
+    // Safety timeout so the modal never stays on the skeleton forever.
+    setTimeout(function(){
+      if(finished) return;
+      finished = true;
+      body.innerHTML = '<div class="empty-state-sm"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71 3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>Google Sheets mengambil masa terlalu lama. Cuba lagi.</p></div>';
+      cleanup();
+    }, 12000);
   }
   window.openResultsModal = openResultsModal;
 
