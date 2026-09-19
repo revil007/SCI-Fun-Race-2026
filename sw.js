@@ -1,4 +1,4 @@
-const CACHE_NAME = 'telematch-portal-v2';
+const CACHE_NAME = 'telematch-portal-v3';
 const CORE_ASSETS = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', function(event){
@@ -34,8 +34,10 @@ self.addEventListener('fetch', function(event){
   event.respondWith(
     fetch(event.request)
       .then(function(response){
-        var copy = response.clone();
-        caches.open(CACHE_NAME).then(function(cache){ cache.put(event.request, copy); });
+        if(response.ok && response.status === 200){
+          var copy = response.clone();
+          caches.open(CACHE_NAME).then(function(cache){ cache.put(event.request, copy); }).catch(function(){});
+        }
         return response;
       })
       .catch(function(){
