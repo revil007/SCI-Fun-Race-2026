@@ -1454,10 +1454,36 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     return d.innerHTML;
   }
 
-  function renderResultTable(panelEl, table){
-    var cols = table.cols.map(function(c){ return c.label || ''; });
-    var rows = table.rows.filter(function(r){
-      return r.c.some(function(cell){ return cell && cell.v !== null && cell.v !== undefined && String(cell.v).trim() !== ''; });
+  function parseCsvLine(text){
+    // Minimal RFC4180-style CSV parser: handles quoted fields with embedded commas/newlines/escaped quotes.
+    var rows = [];
+    var row = [];
+    var field = '';
+    var inQuotes = false;
+    for(var i = 0; i < text.length; i++){
+      var c = text[i];
+      if(inQuotes){
+        if(c === '"'){
+          if(text[i + 1] === '"'){ field += '"'; i++; }
+          else { inQuotes = false; }
+        } else {
+          field += c;
+        }
+      } else {
+        if(c === '"'){ inQuotes = true; }
+        else if(c === ','){ row.push(field); field = ''; }
+        else if(c === '\n'){ row.push(field); rows.push(row); row = []; field = ''; }
+        else if(c === '\r'){ /* skip */ }
+        else { field += c; }
+      }
+    }
+    if(field.length || row.length){ row.push(field); rows.push(row); }
+    return rows;
+  }
+
+  function renderResultTable(panelEl, rows){
+    rows = rows.filter(function(r){
+      return r.some(function(v){ return v !== null && v !== undefined && String(v).trim() !== ''; });
     });
 
     if(!rows.length){
@@ -1465,6 +1491,8 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       return;
     }
 
+    var cols = rows[0];
+    var dataRows = rows.slice(1);
     var hasHeaders = cols.some(function(c){ return c && c.trim() !== ''; });
 
     var html = '<div class="result-scroll"><table><thead><tr>';
@@ -1472,11 +1500,10 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       cols.forEach(function(c){ html += '<th>' + escapeHtmlGeneric(c) + '</th>'; });
     }
     html += '</tr></thead><tbody>';
-    rows.forEach(function(r){
+    dataRows.forEach(function(r){
       html += '<tr>';
-      r.c.forEach(function(cell){
-        var v = cell && cell.v !== null && cell.v !== undefined ? cell.v : '';
-        html += '<td>' + escapeHtmlGeneric(String(v)) + '</td>';
+      r.forEach(function(v){
+        html += '<td>' + escapeHtmlGeneric(String(v || '')) + '</td>';
       });
       html += '</tr>';
     });
@@ -1497,20 +1524,23 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
 
     body.innerHTML = '<div class="skeleton skel-row"></div><div class="skeleton skel-row"></div><div class="skeleton skel-row" style="width:70%;"></div>';
 
-    var callbackName = 'gvizResult_' + gid;
-    window[callbackName] = function(resp){
-      resultCache[gid] = resp.table;
-      renderResultTable(body, resp.table);
-      delete window[callbackName];
-    };
+    var csvUrl = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
+      '/gviz/tq?gid=' + gid + '&tqx=out:csv&_=' + Date.now();
 
-    var script = document.createElement('script');
-    script.src = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
-      '/gviz/tq?gid=' + gid + '&tqx=out:json;responseHandler:' + callbackName + '&_=' + Date.now();
-    script.onerror = function(){
-      body.innerHTML = '<div class="empty-state-sm"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>Tak dapat tarik keputusan. Cuba lagi.</p></div>';
-    };
-    document.body.appendChild(script);
+    fetch(csvUrl, { cache: 'no-store' })
+      .then(function(res){
+        if(!res.ok) throw new Error('Fetch gagal: ' + res.status);
+        return res.text();
+      })
+      .then(function(text){
+        var rows = parseCsvLine(text.trim());
+        resultCache[gid] = rows;
+        renderResultTable(body, rows);
+      })
+      .catch(function(err){
+        body.innerHTML = '<div class="empty-state-sm"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg><p>Tak dapat tarik keputusan. Cuba lagi.</p></div>';
+        console.error(err);
+      });
   }
   window.openResultsModal = openResultsModal;
 
