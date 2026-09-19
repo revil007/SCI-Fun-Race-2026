@@ -1563,11 +1563,11 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
   var galleryGroups = {};
   var gallerySourcesPending = 2;
 
-  function driveLinkToDirect(url){
+  function driveLinkToDirect(url, width){
     if(!url) return url;
     var m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
     if(m && m[1]){
-      return 'https://lh3.googleusercontent.com/d/' + m[1] + '=w1000';
+      return 'https://lh3.googleusercontent.com/d/' + m[1] + '=w' + (width || 1000);
     }
     return url;
   }
@@ -1581,7 +1581,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     var html = '';
     GAME_LIST.forEach(function(game, i){
       var photos = galleryGroups[game] || [];
-      var thumb = photos.length ? driveLinkToDirect(photos[0].link) : '';
+      var thumb = photos.length ? driveLinkToDirect(photos[0].link, 300) : '';
       var bg = thumb ? "background-image:url('" + thumb.replace(/'/g, '%27') + "');" : '';
       var emptyIcon = photos.length ? '' : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="opacity:0.55; margin-bottom:4px;"><path d="M3 3l18 18"/><path d="M10.5 5H14l1.5 2H19a2 2 0 0 1 2 2v9.5"/><path d="M21 16.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1"/><circle cx="12" cy="13" r="3.2"/></svg>';
       html += '<button type="button" class="gallery-tile" style="' + bg + '" ' + (photos.length ? 'onclick="openLightbox(\'' + game.replace(/'/g,"\\'") + '\')"' : 'disabled') + '>';
@@ -1740,6 +1740,15 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       dotsEl.innerHTML = dotsHtml;
       dotsEl.style.display = 'flex';
       hintEl.style.display = 'block';
+
+      // Preload the neighbouring photos so next/prev swipes feel instant.
+      var nextPhoto = lb.photos[(lb.index + 1) % lb.photos.length];
+      var prevPhoto = lb.photos[(lb.index - 1 + lb.photos.length) % lb.photos.length];
+      [nextPhoto, prevPhoto].forEach(function(p){
+        if(!p) return;
+        var pre = new Image();
+        pre.src = driveLinkToDirect(p.link);
+      });
     } else {
       dotsEl.style.display = 'none';
       hintEl.style.display = 'none';
