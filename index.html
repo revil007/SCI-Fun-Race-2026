@@ -301,6 +301,7 @@
 
   /* ---------- Schedule card status styling ---------- */
   .game-card{position:relative; overflow:hidden; transition:background .2s ease, border-color .2s ease, box-shadow .2s ease;}
+  .game-head, .game-details{position:relative; z-index:1;}
   .game-card::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:#D8D7D2;}
   .game-card.status-upcoming{background:#FFFFFF; border-color:var(--line);}
   .game-card.status-upcoming::before{background:#C9C9C3;}
@@ -1598,11 +1599,17 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       window[cb2] = function(resp){
         resp.table.rows.forEach(function(r){
           var game = r.c[1] ? String(r.c[1].v).trim() : '';
-          var link = r.c[2] ? r.c[2].v : '';
+          var rawLinks = r.c[2] ? String(r.c[2].v) : '';
           var caption = r.c[3] ? r.c[3].v : '';
-          if(!link) return;
+          if(!rawLinks) return;
+          // Google Forms puts every file from a multi-file upload question
+          // into the SAME cell, separated by commas — split them out so
+          // each uploaded photo becomes its own gallery entry.
+          var links = rawLinks.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
           if(!galleryGroups[game]) galleryGroups[game] = [];
-          galleryGroups[game].push({ link: link, caption: caption });
+          links.forEach(function(link){
+            galleryGroups[game].push({ link: link, caption: caption });
+          });
         });
         gallerySourceDone();
       };
