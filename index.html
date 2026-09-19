@@ -1192,13 +1192,17 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
   // On event date      = Sedang berlangsung
   // After event date   = Selesai
   (function updateScheduleStatuses(){
+    var now = new Date();
     var today = new Date();
     today.setHours(0,0,0,0);
     var anyOngoing = false;
     var COUNTDOWN_THRESHOLD_DAYS = 3;
+    var COMPLETION_HOUR = 15; // 3:00 PM — status flips to "Selesai" at this time on match day
 
     document.querySelectorAll('.game-card[data-date]').forEach(function(card){
       var eventDate = new Date(card.getAttribute('data-date') + 'T00:00:00');
+      var completionTime = new Date(card.getAttribute('data-date') + 'T00:00:00');
+      completionTime.setHours(COMPLETION_HOUR, 0, 0, 0);
       var badge = card.querySelector('.status-badge');
       var daysUntil = Math.round((eventDate - today) / 86400000);
 
@@ -1217,7 +1221,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
           status = 'upcoming';
           label = 'Akan datang';
         }
-      } else if(today.getTime() === eventDate.getTime()){
+      } else if(today.getTime() === eventDate.getTime() && now < completionTime){
         status = 'ongoing';
         label = 'Sedang berlangsung';
         anyOngoing = true;
