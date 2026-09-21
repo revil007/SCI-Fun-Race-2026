@@ -611,6 +611,11 @@
     color:var(--muted); margin:4px 2px 8px;
   }
   .team-card::before{background:var(--team-color, #D8D7D2) !important;}
+  .team-card{position:relative; padding:13px 15px;}
+  .team-card .task-head{margin-bottom:0; padding-right:74px;}
+  .team-card::after{
+    position:absolute; top:15px; right:15px; margin-top:0;
+  }
   .score-card::before{background:#132A4C !important;}
   .score-card h3{display:flex; align-items:center; gap:6px;}
   .score-card h3::before{
