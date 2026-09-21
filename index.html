@@ -638,6 +638,7 @@
   }
   .team-member-list li{break-inside:avoid; padding-right:4px;}
   .team-count{font-size:11.5px; color:var(--muted); margin-top:8px;}
+  .member-female{color:#C94F82; font-weight:600;}
 
   /* ---------- Bottom nav ---------- */
   .bottom-nav{
@@ -1768,14 +1769,24 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       return (cell && cell.v !== null && cell.v !== undefined) ? String(cell.v).trim() : '';
     }
 
+    function formatMember(name){
+      var isFemale = /\(f\)/i.test(name);
+      var clean = name.replace(/\s*\(f\)\s*/gi, '').trim();
+      return { text: clean, isFemale: isFemale };
+    }
+
     function renderTeam(el, leaderName, members){
       var html = '';
       if(leaderName){
-        html += '<div class="team-leader-row"><span class="label">Ketua Pasukan</span><span class="value">' + escapeHtmlGeneric(leaderName) + '</span></div>';
+        var leader = formatMember(leaderName);
+        html += '<div class="team-leader-row"><span class="label">Ketua Pasukan</span><span class="value' + (leader.isFemale ? ' member-female' : '') + '">' + escapeHtmlGeneric(leader.text) + '</span></div>';
       }
       if(members.length){
         html += '<ul class="team-member-list">';
-        members.forEach(function(m){ html += '<li>' + escapeHtmlGeneric(m) + '</li>'; });
+        members.forEach(function(m){
+          var member = formatMember(m);
+          html += '<li' + (member.isFemale ? ' class="member-female"' : '') + '>' + escapeHtmlGeneric(member.text) + '</li>';
+        });
         html += '</ul>';
         html += '<p class="team-count">' + members.length + ' ahli' + (leaderName ? ' + 1 ketua' : '') + '</p>';
       } else if(!leaderName){
