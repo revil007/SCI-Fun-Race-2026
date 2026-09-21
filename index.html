@@ -82,38 +82,18 @@
     gap:11px;
     min-width:0;
   }
-  .brand-mark-box{
-    background:linear-gradient(160deg, #5488CC 0%, #3E6FB0 45%, #2E5690 100%);
-    border-radius:10px;
-    padding:0 8px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-shrink:0;
-    position:relative;
-    overflow:hidden;
-    border:1px solid rgba(255,255,255,0.22);
-    box-shadow:
-      0 4px 10px rgba(10,20,40,0.35),
-      0 1px 2px rgba(10,20,40,0.25),
-      inset 0 1px 0 rgba(255,255,255,0.25);
-  }
-  .brand-mark-box::before{
-    content:"";
-    position:absolute;
-    top:-40%; left:-20%;
-    width:80%; height:70%;
-    background:linear-gradient(160deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 70%);
-    border-radius:50%;
-    pointer-events:none;
-  }
   .brand-mark{
-    width:42px;
-    height:42px;
+    width:46px;
+    height:46px;
     object-fit:contain;
     flex-shrink:0;
-    position:relative;
-    filter:drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+    filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  }
+  .club-divider{
+    width:1px;
+    height:38px;
+    background:rgba(255,255,255,0.25);
+    flex-shrink:0;
   }
   .club-copy{min-width:0;}
   .club-name{
@@ -829,7 +809,8 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
 <header>
   <div class="brand-row">
     <div class="club-brand">
-      <div class="brand-mark-box"><img class="brand-mark" src="logo-diamond.png" alt="SCI Sport Club"></div>
+      <img class="brand-mark" src="logo-diamond.png" alt="SCI Sport Club">
+      <span class="club-divider"></span>
       <div class="club-copy">
         <div class="club-name display">SCI SPORT CLUB</div>
         <div class="event-name display">TELEMATCH &amp; FUN RACE 2026</div>
