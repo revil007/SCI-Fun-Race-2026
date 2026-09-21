@@ -606,10 +606,6 @@
   .info-card h3{font-size:13px; font-weight:700; margin-bottom:6px; color:var(--ink);}
   .info-card p{font-size:13.5px; color:var(--muted); line-height:1.55;}
 
-  .section-subhead{
-    font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
-    color:var(--muted); margin:4px 2px 8px;
-  }
   .team-card::before{background:var(--team-color, #D8D7D2) !important;}
   .team-card{position:relative; padding:13px 15px;}
   .team-card .task-head{margin-bottom:0; padding-right:74px;}
@@ -1132,7 +1128,9 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
 
   <!-- INFO -->
   <section class="panel" id="info">
-    <p class="section-subhead">Ahli Pasukan</p>
+    <div class="section-head">
+      <h2>Ahli Pasukan</h2>
+    </div>
 
     <div class="info-card game-card team-card" style="--team-color:#E8B923;">
       <div class="task-head">
@@ -1194,7 +1192,9 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       </div>
     </div>
 
-    <p class="section-subhead">Peraturan &amp; Markah</p>
+    <div class="section-head">
+      <h2>Peraturan &amp; Markah</h2>
+    </div>
 
     <div class="info-card game-card score-card">
       <h3>Sistem markah</h3>
