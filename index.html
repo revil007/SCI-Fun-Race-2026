@@ -606,6 +606,38 @@
   .info-card h3{font-size:13px; font-weight:700; margin-bottom:6px; color:var(--ink);}
   .info-card p{font-size:13.5px; color:var(--muted); line-height:1.55;}
 
+  .section-subhead{
+    font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--muted); margin:4px 2px 8px;
+  }
+  .team-card::before{background:var(--team-color, #D8D7D2) !important;}
+  .score-card::before{background:#132A4C !important;}
+  .score-card h3{display:flex; align-items:center; gap:6px;}
+  .score-card h3::before{
+    content:""; display:inline-block; width:14px; height:14px; flex-shrink:0;
+    background:#132A4C;
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z'/%3E%3Cpath d='M7 5H4a3 3 0 0 0 3 3M17 5h3a3 3 0 0 1-3 3'/%3E%3C/svg%3E") center/contain no-repeat;
+    mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z'/%3E%3Cpath d='M7 5H4a3 3 0 0 0 3 3M17 5h3a3 3 0 0 1-3 3'/%3E%3C/svg%3E") center/contain no-repeat;
+  }
+  .team-dot{
+    width:10px; height:10px; border-radius:50%; flex-shrink:0;
+  }
+  .team-card .task-name{font-weight:600;}
+  .team-leader-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:8px 0; border-bottom:1px solid var(--line);
+    font-size:13px;
+  }
+  .team-leader-row .label{color:var(--muted); font-size:11.5px; text-transform:uppercase; letter-spacing:0.04em;}
+  .team-leader-row .value{font-weight:600; color:var(--ink);}
+  .team-member-list{
+    columns:4; column-gap:10px; margin-top:8px;
+    font-size:11.5px; color:var(--ink); line-height:1.7;
+    padding-left:14px;
+  }
+  .team-member-list li{break-inside:avoid; padding-right:4px;}
+  .team-count{font-size:11.5px; color:var(--muted); margin-top:8px;}
+
   /* ---------- Bottom nav ---------- */
   .bottom-nav{
     position:fixed; bottom:0; left:0; right:0;
@@ -1095,10 +1127,69 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
 
   <!-- INFO -->
   <section class="panel" id="info">
-    <div class="info-card">
-      <h3>Butiran acara</h3>
-      <p>Butiran lengkap (tarikh, lokasi dan kenalan urusetia) akan dikemaskini di sini tidak lama lagi.</p>
+    <p class="section-subhead">Ahli Pasukan</p>
+
+    <div class="info-card game-card team-card" style="--team-color:#E8B923;">
+      <div class="task-head">
+        <span class="team-dot" style="background:#E8B923;"></span>
+        <p class="task-name">Obsidian Elite</p>
+      </div>
+      <div class="game-details" id="team-members-obsidian">
+        <p class="result-note">Memuatkan…</p>
+      </div>
     </div>
+
+    <div class="info-card game-card team-card" style="--team-color:#D3372F;">
+      <div class="task-head">
+        <span class="team-dot" style="background:#D3372F;"></span>
+        <p class="task-name">Red Gladiators</p>
+      </div>
+      <div class="game-details" id="team-members-red">
+        <p class="result-note">Memuatkan…</p>
+      </div>
+    </div>
+
+    <div class="info-card game-card team-card" style="--team-color:#1C1F2A;">
+      <div class="task-head">
+        <span class="team-dot" style="background:#1C1F2A;"></span>
+        <p class="task-name">Onyx</p>
+      </div>
+      <div class="game-details" id="team-members-onyx">
+        <p class="result-note">Memuatkan…</p>
+      </div>
+    </div>
+
+    <div class="info-card game-card team-card" style="--team-color:#2C5FA8;">
+      <div class="task-head">
+        <span class="team-dot" style="background:#2C5FA8;"></span>
+        <p class="task-name">Navy Titan</p>
+      </div>
+      <div class="game-details" id="team-members-navy">
+        <p class="result-note">Memuatkan…</p>
+      </div>
+    </div>
+
+    <div class="info-card game-card team-card" style="--team-color:#C94F82;">
+      <div class="task-head">
+        <span class="team-dot" style="background:#C94F82;"></span>
+        <p class="task-name">Pink Storm</p>
+      </div>
+      <div class="game-details" id="team-members-pink">
+        <p class="result-note">Memuatkan…</p>
+      </div>
+    </div>
+
+    <div class="info-card game-card team-card" style="--team-color:#8FA6C4;">
+      <div class="task-head">
+        <span class="team-dot" style="background:#8FA6C4;"></span>
+        <p class="task-name">Diamond X</p>
+      </div>
+      <div class="game-details" id="team-members-diamond">
+        <p class="result-note">Memuatkan…</p>
+      </div>
+    </div>
+
+    <p class="section-subhead">Peraturan &amp; Markah</p>
 
     <div class="info-card game-card score-card">
       <h3>Sistem markah</h3>
@@ -1563,11 +1654,11 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
   var galleryGroups = {};
   var gallerySourcesPending = 2;
 
-  function driveLinkToDirect(url){
+  function driveLinkToDirect(url, width){
     if(!url) return url;
     var m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
     if(m && m[1]){
-      return 'https://lh3.googleusercontent.com/d/' + m[1] + '=w1000';
+      return 'https://lh3.googleusercontent.com/d/' + m[1] + '=w' + (width || 1000);
     }
     return url;
   }
@@ -1581,7 +1672,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     var html = '';
     GAME_LIST.forEach(function(game, i){
       var photos = galleryGroups[game] || [];
-      var thumb = photos.length ? driveLinkToDirect(photos[0].link) : '';
+      var thumb = photos.length ? driveLinkToDirect(photos[0].link, 300) : '';
       var bg = thumb ? "background-image:url('" + thumb.replace(/'/g, '%27') + "');" : '';
       var emptyIcon = photos.length ? '' : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="opacity:0.55; margin-bottom:4px;"><path d="M3 3l18 18"/><path d="M10.5 5H14l1.5 2H19a2 2 0 0 1 2 2v9.5"/><path d="M21 16.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1"/><circle cx="12" cy="13" r="3.2"/></svg>';
       html += '<button type="button" class="gallery-tile" style="' + bg + '" ' + (photos.length ? 'onclick="openLightbox(\'' + game.replace(/'/g,"\\'") + '\')"' : 'disabled') + '>';
@@ -1653,6 +1744,72 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
   }
 
   loadGallery();
+
+  // ---------- Team members (Info tab) ----------
+  (function loadTeamMembers(){
+    var TEAM_SHEET_ID = '1SmwLU4ik6t3nhNaeEVbxDZqigRO4QBQhcl79FkR-6x4';
+    var TEAM_GID = '1409622416';
+    // Column order in the sheet (B..G) matches these team card ids, left to right.
+    var TEAM_ORDER = [
+      { id: 'team-members-obsidian', name: 'Obsidian Elite' },
+      { id: 'team-members-red', name: 'Red Gladiators' },
+      { id: 'team-members-onyx', name: 'Onyx' },
+      { id: 'team-members-navy', name: 'Navy Titan' },
+      { id: 'team-members-pink', name: 'Pink Storm' },
+      { id: 'team-members-diamond', name: 'Diamond X' }
+    ];
+
+    function cellText(cell){
+      return (cell && cell.v !== null && cell.v !== undefined) ? String(cell.v).trim() : '';
+    }
+
+    function renderTeam(el, leaderName, members){
+      var html = '';
+      if(leaderName){
+        html += '<div class="team-leader-row"><span class="label">Ketua Pasukan</span><span class="value">' + escapeHtmlGeneric(leaderName) + '</span></div>';
+      }
+      if(members.length){
+        html += '<ul class="team-member-list">';
+        members.forEach(function(m){ html += '<li>' + escapeHtmlGeneric(m) + '</li>'; });
+        html += '</ul>';
+        html += '<p class="team-count">' + members.length + ' ahli' + (leaderName ? ' + 1 ketua' : '') + '</p>';
+      } else if(!leaderName){
+        html = '<p class="result-note">Senarai ahli akan dikemaskini tidak lama lagi.</p>';
+      }
+      el.innerHTML = html;
+    }
+
+    var callbackName = 'gvizTeamMembers';
+    window[callbackName] = function(resp){
+      var rows = resp.table.rows.map(function(r){ return r.c.map(cellText); });
+      // rows[0] = Team Leader row; rows[1] = blank spacer; rows[2..] = member rows
+      var leaderRow = rows[0] || [];
+      var memberRows = rows.slice(1).filter(function(r){
+        return r.some(function(v){ return v !== ''; });
+      });
+
+      TEAM_ORDER.forEach(function(team, i){
+        var colIndex = i + 1; // column A is the row label, teams start at column B
+        var leaderName = leaderRow[colIndex] || '';
+        var members = memberRows.map(function(r){ return r[colIndex] || ''; }).filter(Boolean);
+        var el = document.getElementById(team.id);
+        if(el) renderTeam(el, leaderName, members);
+      });
+
+      delete window[callbackName];
+    };
+
+    var script = document.createElement('script');
+    script.src = 'https://docs.google.com/spreadsheets/d/' + TEAM_SHEET_ID +
+      '/gviz/tq?gid=' + TEAM_GID + '&headers=1&range=A3:G27&tqx=out:json;responseHandler:' + callbackName + '&_=' + Date.now();
+    script.onerror = function(){
+      TEAM_ORDER.forEach(function(team){
+        var el = document.getElementById(team.id);
+        if(el) el.innerHTML = '<p class="result-note">Tak dapat tarik senarai ahli. Cuba lagi.</p>';
+      });
+    };
+    document.body.appendChild(script);
+  })();
 
   // ---------- Dark mode toggle ----------
   (function(){
@@ -1740,6 +1897,15 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       dotsEl.innerHTML = dotsHtml;
       dotsEl.style.display = 'flex';
       hintEl.style.display = 'block';
+
+      // Preload the neighbouring photos so next/prev swipes feel instant.
+      var nextPhoto = lb.photos[(lb.index + 1) % lb.photos.length];
+      var prevPhoto = lb.photos[(lb.index - 1 + lb.photos.length) % lb.photos.length];
+      [nextPhoto, prevPhoto].forEach(function(p){
+        if(!p) return;
+        var pre = new Image();
+        pre.src = driveLinkToDirect(p.link);
+      });
     } else {
       dotsEl.style.display = 'none';
       hintEl.style.display = 'none';
