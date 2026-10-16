@@ -155,6 +155,11 @@
   .section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px;}
   .section-head h2{font-size:15px; font-weight:600;}
   .section-head span{font-size:12px; color:var(--muted);}
+  .gallery-head-right{display:flex; align-items:center; gap:10px;}
+  .gallery-upload-btn{display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background:#132A4C; color:#F4B52A; box-shadow:0 2px 6px rgba(0,0,0,.2); text-decoration:none; -webkit-tap-highlight-color:transparent;}
+  .gallery-upload-btn[hidden]{display:none;}
+  .gallery-upload-btn:active{transform:scale(.94);}
+  html[data-theme="dark"] .gallery-upload-btn{background:#F4B52A; color:#132A4C;}
 
   /* ---------- Leaderboard (signature: race lanes) ---------- */
   .lane{
@@ -904,11 +909,11 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       </div>
     </div>
 
-    <div class="game-card" data-date="2026-10-10">
+    <div class="game-card" data-date="2026-10-17">
       <div class="game-head">
         <div class="game-no">3</div>
         <p class="game-name">Futsal &amp; Netball</p>
-        <span class="game-date">10 Okt</span>
+        <span class="game-date">17 Okt</span>
         <span class="status-badge"></span>
       </div>
       <div class="game-details">
@@ -1075,7 +1080,12 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
   <section class="panel" id="gallery">
     <div class="section-head">
       <h2>Galeri acara</h2>
-      <span id="gallery-count"><span class="skeleton" style="display:inline-block; width:56px; height:11px; vertical-align:middle;"></span></span>
+      <div class="gallery-head-right">
+        <span id="gallery-count"><span class="skeleton" style="display:inline-block; width:56px; height:11px; vertical-align:middle;"></span></span>
+        <a id="gallery-upload-btn" class="gallery-upload-btn" href="#" target="_blank" rel="noopener" aria-label="Tambah gambar" title="Tambah gambar" hidden>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" transform="translate(0 0)"/><path d="M12 10v6M9 13h6"/></svg>
+        </a>
+      </div>
     </div>
     <div class="gallery-grid" id="gallery-grid">
       <div class="skeleton skel-tile"></div>
@@ -1635,6 +1645,9 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
 
   // ---------- Gallery (5 sport cards, merged from 2 sources: manual-link Gallery tab + Form upload responses) ----------
   var GALLERY_GID = '415481268';
+  // Pautan Google Form untuk upload gambar (Send -> link). Kosong = butang disembunyikan.
+  var GALLERY_UPLOAD_FORM_URL = '';
+  (function(){ var b=document.getElementById('gallery-upload-btn'); if(b && GALLERY_UPLOAD_FORM_URL){ b.href=GALLERY_UPLOAD_FORM_URL; b.hidden=false; } })();
   var GALLERY_FORM_SHEET_ID = '1vBkPyVfoZANDCvD_9jUkCdtlLFSBLQHOcmIc5tXKLJs';
   var GALLERY_FORM_GID = '1662262716';
   var GAME_LIST = ['Volleyball', 'Badminton', 'Futsal & Netball', 'Bowling', 'Pickleball'];
