@@ -1331,12 +1331,6 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       var badge = card.querySelector('.status-badge');
       var daysUntil = Math.round((eventDate - today) / 86400000);
 
-      card.classList.remove('status-upcoming', 'status-ongoing', 'status-completed', 'status-soon');
-      if(badge){
-        badge.classList.remove('show', 'upcoming', 'ongoing', 'completed', 'soon');
-        badge.innerHTML = '';
-      }
-
       var startAttr = card.getAttribute('data-start'); // optional "HH:MM" mula acara
       var startTime = new Date(card.getAttribute('data-date') + 'T00:00:00');
       if(startAttr){
@@ -1347,9 +1341,9 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       var status, label;
       if(today.getTime() === eventDate.getTime() && now < startTime){
         status = 'soon';
-        var mins = Math.max(1, Math.ceil((startTime - now) / 60000));
-        var hh = Math.floor(mins / 60), mm = mins % 60;
-        label = 'Mula dalam ' + (hh ? hh + 'j ' : '') + mm + 'm';
+        var secs = Math.max(0, Math.ceil((startTime - now) / 1000));
+        var pad = function(n){ return (n < 10 ? '0' : '') + n; };
+        label = pad(Math.floor(secs / 3600)) + ':' + pad(Math.floor((secs % 3600) / 60)) + ':' + pad(secs % 60);
       } else if(today < eventDate){
         if(daysUntil <= COUNTDOWN_THRESHOLD_DAYS){
           status = 'soon';
@@ -1361,10 +1355,20 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       } else if(today.getTime() === eventDate.getTime() && now < completionTime){
         status = 'ongoing';
         label = 'Sedang berlangsung';
-        anyOngoing = true;
       } else {
         status = 'completed';
         label = 'Selesai';
+      }
+
+      if(status === 'ongoing') anyOngoing = true;
+      // Kemas kini DOM hanya bila teks berubah (elak animasi titik berkelip setiap saat)
+      if(card._statusKey === status + '|' + label) return;
+      card._statusKey = status + '|' + label;
+
+      card.classList.remove('status-upcoming', 'status-ongoing', 'status-completed', 'status-soon');
+      if(badge){
+        badge.classList.remove('show', 'upcoming', 'ongoing', 'completed', 'soon');
+        badge.innerHTML = '';
       }
 
       card.classList.add('status-' + status);
@@ -1385,7 +1389,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     if(livePill) livePill.classList.toggle('show', anyOngoing);
   }
   updateScheduleStatuses();
-  setInterval(updateScheduleStatuses, 30000); // countdown & status tukar sendiri tanpa refresh
+  setInterval(updateScheduleStatuses, 1000); // countdown jam:minit:saat & status tukar sendiri tanpa refresh
 
   // ---------- Fun Race Part 1/2 toggle ----------
   function setFunRacePart(part){
