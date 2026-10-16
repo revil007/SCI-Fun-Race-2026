@@ -504,6 +504,20 @@
   }
   .results-modal-body{padding:14px 16px; overflow-y:auto; flex:1; min-height:0;}
 
+  .gal-toggle{margin-bottom:14px;}
+  #gal-bonus[hidden], #gal-event[hidden]{display:none;}
+  /* ---------- Fun Race: hasil tugasan ---------- */
+  .fr-results{margin-top:22px;}
+  .fr-chips{display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:6px; -webkit-overflow-scrolling:touch;}
+  .fr-chip{flex:0 0 auto; border:1px solid var(--border, rgba(0,0,0,.15)); background:transparent; color:inherit; font:600 12px 'Inter',sans-serif; padding:6px 12px; border-radius:999px; cursor:pointer;}
+  .fr-chip.active{background:#132A4C; border-color:#132A4C; color:#F4B52A;}
+  html[data-theme="dark"] .fr-chip.active{background:#F4B52A; border-color:#F4B52A; color:#132A4C;}
+  .fr-results-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+  .fr-thumb{position:relative; aspect-ratio:1; border-radius:10px; overflow:hidden; border:none; padding:0; cursor:pointer; background:var(--charcoal, #222);}
+  .fr-thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .fr-thumb .fr-thumb-label{position:absolute; left:0; right:0; bottom:0; padding:18px 8px 7px; color:#fff; font:600 11px 'Inter',sans-serif; text-align:left; background:linear-gradient(180deg, transparent, rgba(0,0,0,.7));}
+  .fr-thumb .fr-thumb-label small{display:block; font-weight:500; opacity:.85; font-size:10px;}
+  .fr-results-empty{grid-column:1/-1; text-align:center; font-size:13px; color:var(--muted); padding:18px 0;}
   /* ---------- Gallery ---------- */
   .gallery-grid{
     display:grid; grid-template-columns:1fr 1fr; gap:8px;
@@ -1078,6 +1092,11 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
 
   <!-- GALERI -->
   <section class="panel" id="gallery">
+    <div class="fr-toggle gal-toggle">
+      <button type="button" class="fr-toggle-btn active" data-gal="event" onclick="setGalleryView('event')">Acara</button>
+      <button type="button" class="fr-toggle-btn" data-gal="bonus" onclick="setGalleryView('bonus')">Bonus Pose</button>
+    </div>
+    <div id="gal-event">
     <div class="section-head">
       <h2>Galeri acara</h2>
       <div class="gallery-head-right">
@@ -1092,6 +1111,18 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       <div class="skeleton skel-tile"></div>
       <div class="skeleton skel-tile"></div>
       <div class="skeleton skel-tile"></div>
+    </div>
+    </div>
+    <div id="gal-bonus" hidden>
+    <div class="fr-results" id="fr-results" style="margin-top:0;">
+      <div class="section-head"><h2>Galeri bonus pose</h2><span id="fr-results-count"></span></div>
+      <div class="fr-chips" id="fr-results-chips"></div>
+      <div class="fr-results-grid" id="fr-results-grid">
+        <div class="skeleton skel-tile"></div><div class="skeleton skel-tile"></div>
+        <div class="skeleton skel-tile"></div><div class="skeleton skel-tile"></div>
+      </div>
+    </div>
+
     </div>
   </section>
 
@@ -1416,6 +1447,87 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       '/gviz/tq?tqx=out:json;responseHandler:' + callbackName + '&_=' + Date.now();
     script.onerror = function(){ pctEl.textContent = '–'; };
     document.body.appendChild(script);
+  })();
+
+  function setGalleryView(v){
+    document.querySelectorAll('.gal-toggle .fr-toggle-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.gal === v); });
+    document.getElementById('gal-event').hidden = (v !== 'event');
+    document.getElementById('gal-bonus').hidden = (v !== 'bonus');
+  }
+  window.setGalleryView = setGalleryView;
+
+  // ---------- Fun Race: gambar hasil tugasan (sheet jawapan Form) ----------
+  (function loadTaskResults(){
+    var grid = document.getElementById('fr-results-grid');
+    if(!grid) return;
+    var RESULT_SHEET_ID = '1PIj0zFq3TyHgV22O_jp-e-x0hWtnyelzO6d04Jt3T0c';
+    var COL_TEAM_NAME = 16; // "Nama Kumpulan"
+    var SLOTS = [
+      { col:2,  sport:'Volleyball',        kind:'Bonus Pose' },
+      { col:4,  sport:'Badminton',         kind:'Bonus Pose' },
+      { col:6,  sport:'Futsal & Netball',  kind:'Bonus Pose' },
+      { col:8,  sport:'Bowling',           kind:'Bonus Pose' },
+      { col:10, sport:'Pickleball',        kind:'Bonus Pose' }
+    ];
+    var FILTERS = ['Volleyball','Badminton','Futsal & Netball','Bowling','Pickleball'];
+    var all = [];
+    var current = 'Volleyball';
+    var shown = [];
+
+    function cellText(c){ return (c && c.v !== null && c.v !== undefined) ? String(c.v).trim() : ''; }
+
+    function renderChips(){
+      var el = document.getElementById('fr-results-chips');
+      el.innerHTML = FILTERS.map(function(f){
+        return '<button type="button" class="fr-chip' + (f === current ? ' active' : '') + '" data-f="' + escapeHtml(f) + '">' + escapeHtml(f) + '</button>';
+      }).join('');
+      Array.prototype.forEach.call(el.querySelectorAll('.fr-chip'), function(b){
+        b.addEventListener('click', function(){ current = b.getAttribute('data-f'); renderChips(); renderGrid(); });
+      });
+    }
+
+    function renderGrid(){
+      shown = all.filter(function(p){ return current === 'Semua' || p.sport === current; });
+      document.getElementById('fr-results-count').textContent = shown.length + ' gambar';
+      if(!shown.length){
+        grid.innerHTML = '<p class="fr-results-empty">Belum ada gambar.</p>';
+        return;
+      }
+      grid.innerHTML = shown.map(function(p, i){
+        return '<button type="button" class="fr-thumb" data-i="' + i + '"><img loading="lazy" alt="" src="' + driveLinkToDirect(p.link, 300) + '">' +
+          '<span class="fr-thumb-label">' + escapeHtml(p.team) + '<small>' + escapeHtml(p.sport + ' · ' + p.kind) + '</small></span></button>';
+      }).join('');
+      Array.prototype.forEach.call(grid.querySelectorAll('.fr-thumb'), function(b){
+        b.addEventListener('click', function(){
+          var photos = shown.map(function(p){ return { link:p.link, caption:p.team + ' · ' + p.sport + ' · ' + p.kind }; });
+          openLightboxWithPhotos(photos, Number(b.getAttribute('data-i')), 'Galeri bonus pose');
+        });
+      });
+    }
+
+    window.gvizTaskResults = function(resp){
+      var rows = (resp && resp.table && resp.table.rows) || [];
+      rows.forEach(function(r){
+        var team = cellText(r.c[COL_TEAM_NAME]) || 'Tanpa nama';
+        SLOTS.forEach(function(sl){
+          var raw = cellText(r.c[sl.col]);
+          if(!raw) return;
+          raw.split(',').forEach(function(l){
+            l = l.trim();
+            if(l) all.push({ link:l, team:team, sport:sl.sport, kind:sl.kind });
+          });
+        });
+      });
+      all.reverse(); // terbaru dahulu
+      renderChips(); renderGrid();
+      delete window.gvizTaskResults;
+    };
+
+    renderChips();
+    var sc = document.createElement('script');
+    sc.src = 'https://docs.google.com/spreadsheets/d/' + RESULT_SHEET_ID + '/gviz/tq?tqx=out:json;responseHandler:gvizTaskResults&_=' + Date.now();
+    sc.onerror = function(){ grid.innerHTML = '<p class="fr-results-empty">Tak dapat tarik gambar. Cuba refresh.</p>'; };
+    document.body.appendChild(sc);
   })();
 
   // ---------- Live leaderboard from Google Sheet (JSONP — works from file:// and https://) ----------
@@ -1951,7 +2063,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
   window.task1InspoPhotos = [
     { link: 'task1-inspo-5.jpg', caption: 'Volleyball · Tarikh akhir: 23 Ogos 2026' },
     { link: 'task1-inspo-2.jpg', caption: 'Badminton · Tarikh akhir: 20 Sep 2026' },
-    { link: 'task1-inspo-3.jpg', caption: 'Futsal & Netball · Tarikh akhir: 11 Okt 2026' },
+    { link: 'task1-inspo-3.jpg', caption: 'Futsal & Netball · Tarikh akhir: 18 Okt 2026' },
     { link: 'task1-inspo-4.jpg', caption: 'Bowling · Tarikh akhir: 21 Nov 2026' },
     { link: 'task1-inspo-1.jpg', caption: 'Pickleball · Tarikh akhir: 12 Dis 2026' }
   ];
