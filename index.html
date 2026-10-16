@@ -1310,7 +1310,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
   // Before event date = Akan datang
   // On event date      = Sedang berlangsung
   // After event date   = Selesai
-  (function updateScheduleStatuses(){
+  function updateScheduleStatuses(){
     var now = new Date();
     var today = new Date();
     today.setHours(0,0,0,0);
@@ -1347,7 +1347,9 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       var status, label;
       if(today.getTime() === eventDate.getTime() && now < startTime){
         status = 'soon';
-        label = 'Hari ini, ' + startAttr;
+        var mins = Math.max(1, Math.ceil((startTime - now) / 60000));
+        var hh = Math.floor(mins / 60), mm = mins % 60;
+        label = 'Mula dalam ' + (hh ? hh + 'j ' : '') + mm + 'm';
       } else if(today < eventDate){
         if(daysUntil <= COUNTDOWN_THRESHOLD_DAYS){
           status = 'soon';
@@ -1381,7 +1383,9 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
 
     var livePill = document.getElementById('live-pill');
     if(livePill) livePill.classList.toggle('show', anyOngoing);
-  })();
+  }
+  updateScheduleStatuses();
+  setInterval(updateScheduleStatuses, 30000); // countdown & status tukar sendiri tanpa refresh
 
   // ---------- Fun Race Part 1/2 toggle ----------
   function setFunRacePart(part){
