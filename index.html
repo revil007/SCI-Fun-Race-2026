@@ -923,7 +923,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       </div>
     </div>
 
-    <div class="game-card" data-date="2026-10-17">
+    <div class="game-card" data-date="2026-10-17" data-start="10:00" data-end="16:00">
       <div class="game-head">
         <div class="game-no">3</div>
         <p class="game-name">Futsal &amp; Netball</p>
@@ -1321,7 +1321,13 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     document.querySelectorAll('.game-card[data-date]').forEach(function(card){
       var eventDate = new Date(card.getAttribute('data-date') + 'T00:00:00');
       var completionTime = new Date(card.getAttribute('data-date') + 'T00:00:00');
-      completionTime.setHours(COMPLETION_HOUR, 0, 0, 0);
+      var endAttr = card.getAttribute('data-end'); // optional "HH:MM" tamat acara
+      if(endAttr){
+        var ep = endAttr.split(':');
+        completionTime.setHours(Number(ep[0]) || COMPLETION_HOUR, Number(ep[1]) || 0, 0, 0);
+      } else {
+        completionTime.setHours(COMPLETION_HOUR, 0, 0, 0);
+      }
       var badge = card.querySelector('.status-badge');
       var daysUntil = Math.round((eventDate - today) / 86400000);
 
@@ -1331,8 +1337,18 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
         badge.innerHTML = '';
       }
 
+      var startAttr = card.getAttribute('data-start'); // optional "HH:MM" mula acara
+      var startTime = new Date(card.getAttribute('data-date') + 'T00:00:00');
+      if(startAttr){
+        var sp = startAttr.split(':');
+        startTime.setHours(Number(sp[0]) || 0, Number(sp[1]) || 0, 0, 0);
+      }
+
       var status, label;
-      if(today < eventDate){
+      if(today.getTime() === eventDate.getTime() && now < startTime){
+        status = 'soon';
+        label = 'Hari ini, ' + startAttr;
+      } else if(today < eventDate){
         if(daysUntil <= COUNTDOWN_THRESHOLD_DAYS){
           status = 'soon';
           label = daysUntil === 1 ? 'Esok!' : 'H-' + daysUntil;
