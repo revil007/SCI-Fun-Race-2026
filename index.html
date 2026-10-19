@@ -505,6 +505,7 @@
   .results-modal-body{padding:14px 16px; overflow-y:auto; flex:1; min-height:0;}
 
   .gal-toggle{margin-bottom:14px;}
+  .gal-toggle .fr-toggle-btn:disabled{opacity:.45; cursor:not-allowed;}
   #gal-bonus[hidden], #gal-event[hidden]{display:none;}
   /* ---------- Fun Race: hasil tugasan ---------- */
   .fr-results{margin-top:22px;}
@@ -1094,7 +1095,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
   <section class="panel" id="gallery">
     <div class="fr-toggle gal-toggle">
       <button type="button" class="fr-toggle-btn active" data-gal="event" onclick="setGalleryView('event')">Acara</button>
-      <button type="button" class="fr-toggle-btn" data-gal="bonus" onclick="setGalleryView('bonus')">Bonus Pose</button>
+      <button type="button" class="fr-toggle-btn" data-gal="bonus" onclick="setGalleryView('bonus')" disabled title="Akan datang">Bonus Pose</button>
     </div>
     <div id="gal-event">
     <div class="section-head">
