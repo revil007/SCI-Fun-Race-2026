@@ -1571,7 +1571,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     document.body.appendChild(sc);
   })();
 
-  // ---------- Popup pengumuman (sekali sehari setiap poster, hilang selepas tarikh tamat) ----------
+  // ---------- Popup pengumuman (keluar setiap kali buka, hilang selepas tarikh tamat) ----------
   (function announcePopup(){
     var el = document.getElementById('announce');
     if(!el) return;
@@ -1583,11 +1583,8 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       { key:'announce-csr-2026',     src:'announce-csr.jpg',     alt:'CSR Activity Environmental Clean Up Challenge, 28 November 2026', until:'2026-11-28T23:59:00' }
     ];
     var now = new Date();
-    var todayStr = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
     var queue = ANNOUNCEMENTS.filter(function(a){
-      if(now > new Date(a.until)) return false;
-      try { if(localStorage.getItem(a.key) === todayStr) return false; } catch(e){}
-      return true;
+      return now <= new Date(a.until);
     });
     if(!queue.length) return;
     var total = queue.length, idx = 0;
@@ -1603,7 +1600,6 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       img.src = a.src;
     }
     function next(){
-      try { localStorage.setItem(queue[idx].key, todayStr); } catch(e){}
       idx++;
       if(idx >= total){ el.hidden = true; return; }
       showCurrent();
