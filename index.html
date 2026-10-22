@@ -1638,8 +1638,17 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
 
   function renderLanes(standings){
     var lanesEl = document.getElementById('lanes');
+    // Kedudukan seri: pasukan dengan markah sama dapat nombor yang sama (1,2,2,4...).
+    var scoredTeams = standings.filter(function(t){ return t.points !== null; });
+    var allEqual = scoredTeams.length === standings.length && standings.every(function(t){ return t.points === standings[0].points; });
+    function rankOf(team, i){
+      if(team.points === null || allEqual) return i + 1;
+      return 1 + standings.filter(function(t){ return t.points !== null && t.points > team.points; }).length;
+    }
     if(standings.length){
-      document.getElementById('current-leader').textContent = standings[0].name;
+      var leaders = (allEqual || standings[0].points === null) ? [standings[0]] :
+        standings.filter(function(t){ return t.points === standings[0].points; });
+      document.getElementById('current-leader').textContent = leaders.map(function(t){ return t.name; }).join(' & ');
       document.getElementById('current-points').textContent = standings[0].points === null ? '–' : standings[0].points;
     }
 
@@ -1652,9 +1661,9 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
 
     var html = '';
     standings.forEach(function(team, i){
-      var rank = i + 1;
+      var rank = rankOf(team, i);
       var meta = getTeamMeta(team.name);
-      var hasScore = anyScored && team.points !== null;
+      var hasScore = anyScored && team.points !== null && !allEqual;
       var rankClass = hasScore && rank <= 3 ? ' rank-' + rank : '';
       var ptsDisplay = team.points === null ? '–' : team.points;
       html += '<div class="lane' + rankClass + '" style="--team:' + meta.color + ';">';
