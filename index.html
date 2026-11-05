@@ -363,6 +363,7 @@
   }
   .task-card.mystery .task-head{position:relative; justify-content:flex-start; gap:8px; margin-bottom:14px;}
   .task-card.mystery .task-name{color:var(--cream); flex:0 1 auto;}
+  .task-card.mystery .game-date{margin-left:auto; color:#F4B52A; background:rgba(244,181,42,0.14); border:1px solid rgba(244,181,42,0.35);}
   .mystery-video{
     width:100%; display:block; border-radius:10px;
     margin-bottom:0; position:relative;
@@ -758,6 +759,50 @@ main{max-width:500px;padding:20px 16px 96px;}
 .install-banner{border-radius:12px;box-shadow:0 8px 24px rgba(16,35,63,.12);}
 @media(min-width:700px){main{max-width:560px;}header{padding-left:max(20px,calc((100vw - 560px)/2));padding-right:max(20px,calc((100vw - 560px)/2));}.bottom-nav{max-width:560px;}}
 
+/* ---------- Tablet (>=768px): lebih lebar, 2 lajur ---------- */
+@media(min-width:768px){
+  main{max-width:880px; padding:22px 24px 104px;}
+  header{padding-left:max(24px,calc((100vw - 880px)/2)); padding-right:max(24px,calc((100vw - 880px)/2));}
+  .bottom-nav{max-width:880px; border-radius:14px 14px 0 0;}
+  .bottom-nav button{padding:11px 0 10px;}
+  .bottom-nav span{font-size:11px;}
+
+  /* Kedudukan: 2 lajur */
+  #lanes{display:grid; grid-template-columns:1fr 1fr; gap:10px 14px; align-items:start;}
+  #lanes .lane{margin-bottom:0;}
+  #lanes .empty-state{grid-column:1/-1;}
+
+  /* Jadual, Fun Race, Info: kad 2 lajur, tajuk/nota penuh lebar */
+  #schedule.active, #info.active, #funrace1 .fr-part.active{display:grid; grid-template-columns:1fr 1fr; gap:10px 14px; align-items:start;}
+  #schedule.active > :not(.game-card), #info.active > :not(.team-card),
+  #funrace1 .fr-part.active > :not(.task-card){grid-column:1/-1;}
+  #schedule.active > .game-card, #info.active > .info-card, #funrace1 .fr-part.active > .task-card{margin:0;}
+  #info.active > .score-card{grid-column:1/-1;}
+  #funrace1 .fr-part.active{align-items:stretch;}
+  #funrace1 .fr-part.active > .task-card.task-wide{grid-column:1/-1;}
+  .gallery-tile{aspect-ratio:4/3;}
+
+  /* Galeri: 3 lajur */
+  .gallery-grid, .fr-results-grid{grid-template-columns:repeat(3,1fr); gap:12px;}
+
+  /* Lightbox & modal lebih besar */
+  .lightbox-top{max-width:760px;}
+  .lightbox-stage{max-width:760px;}
+  .lightbox-caption{max-width:760px; font-size:14px;}
+  .results-modal-card{max-width:620px;}
+  .announce-box{max-width:min(560px,100%);}
+}
+
+/* ---------- Tablet besar / desktop kecil (>=1100px) ---------- */
+@media(min-width:1100px){
+  main{max-width:1040px;}
+  header{padding-left:max(24px,calc((100vw - 1040px)/2)); padding-right:max(24px,calc((100vw - 1040px)/2));}
+  .bottom-nav{max-width:1040px;}
+  #lanes{grid-template-columns:1fr 1fr 1fr;}
+  #schedule.active{grid-template-columns:1fr 1fr 1fr;}
+  .gallery-grid, .fr-results-grid{grid-template-columns:repeat(4,1fr);}
+}
+
 /* ===== DARK MODE ===== */
 .theme-toggle{
   background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.16);
@@ -1009,7 +1054,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       <p class="fr-progress-dates-mini"><span>22 Ogos</span><span>31 Dis</span></p>
     </div>
 
-    <div class="task-card">
+    <div class="task-card task-wide">
       <div class="task-head">
         <div class="task-no">1</div>
         <p class="task-name">One Team, One Frame</p>
@@ -1078,10 +1123,11 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     <div class="task-card mystery">
       <div class="task-head">
         <div class="task-no">5</div>
-        <p class="task-name">The Unknown (Coming in October)</p>
+        <p class="task-name">Speed Game Challenge</p>
+        <span class="game-date" title="Sebelum 12:00 tengah malam, 28 November 2026 (hari acara CSR)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>28 Nov</span>
       </div>
       <video class="mystery-video" autoplay muted loop playsinline>
-        <source src="task5-teaser.mp4" type="video/mp4">
+        <source src="speed-game-teaser.mp4" type="video/mp4">
       </video>
     </div>
 
