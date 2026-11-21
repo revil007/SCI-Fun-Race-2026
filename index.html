@@ -363,6 +363,12 @@
   }
   .task-card.mystery .task-head{position:relative; justify-content:flex-start; gap:8px; margin-bottom:14px;}
   .task-card.mystery .task-name{color:var(--cream); flex:0 1 auto;}
+  .task-card.mystery .game-date{margin-left:auto; color:#F4B52A; background:rgba(244,181,42,0.14); border:1px solid rgba(244,181,42,0.35);}
+  .speed-link[hidden]{display:none;}
+  .speed-link{margin-top:12px; padding:11px 14px; border-radius:10px; background:rgba(244,181,42,0.10); border:1px solid rgba(244,181,42,0.30); color:#F4B52A; font-size:13px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px; text-align:center;}
+  .speed-link a{color:#F4B52A; text-decoration:none; display:flex; align-items:center; gap:8px; width:100%; justify-content:center;}
+  .speed-link.open{background:#F4B52A; border-color:#F4B52A;}
+  .speed-link.open a{color:#132A4C; font-weight:700;}
   .mystery-video{
     width:100%; display:block; border-radius:10px;
     margin-bottom:0; position:relative;
@@ -758,6 +764,50 @@ main{max-width:500px;padding:20px 16px 96px;}
 .install-banner{border-radius:12px;box-shadow:0 8px 24px rgba(16,35,63,.12);}
 @media(min-width:700px){main{max-width:560px;}header{padding-left:max(20px,calc((100vw - 560px)/2));padding-right:max(20px,calc((100vw - 560px)/2));}.bottom-nav{max-width:560px;}}
 
+/* ---------- Tablet (>=768px): lebih lebar, 2 lajur ---------- */
+@media(min-width:768px){
+  main{max-width:880px; padding:22px 24px 104px;}
+  header{padding-left:max(24px,calc((100vw - 880px)/2)); padding-right:max(24px,calc((100vw - 880px)/2));}
+  .bottom-nav{max-width:880px; border-radius:14px 14px 0 0;}
+  .bottom-nav button{padding:11px 0 10px;}
+  .bottom-nav span{font-size:11px;}
+
+  /* Kedudukan: 2 lajur */
+  #lanes{display:grid; grid-template-columns:1fr 1fr; gap:10px 14px; align-items:start;}
+  #lanes .lane{margin-bottom:0;}
+  #lanes .empty-state{grid-column:1/-1;}
+
+  /* Jadual, Fun Race, Info: kad 2 lajur, tajuk/nota penuh lebar */
+  #schedule.active, #info.active, #funrace1 .fr-part.active{display:grid; grid-template-columns:1fr 1fr; gap:10px 14px; align-items:start;}
+  #schedule.active > :not(.game-card), #info.active > :not(.team-card),
+  #funrace1 .fr-part.active > :not(.task-card){grid-column:1/-1;}
+  #schedule.active > .game-card, #info.active > .info-card, #funrace1 .fr-part.active > .task-card{margin:0;}
+  #info.active > .score-card{grid-column:1/-1;}
+  #funrace1 .fr-part.active{align-items:stretch;}
+  #funrace1 .fr-part.active > .task-card.task-wide{grid-column:1/-1;}
+  .gallery-tile{aspect-ratio:4/3;}
+
+  /* Galeri: 3 lajur */
+  .gallery-grid, .fr-results-grid{grid-template-columns:repeat(3,1fr); gap:12px;}
+
+  /* Lightbox & modal lebih besar */
+  .lightbox-top{max-width:760px;}
+  .lightbox-stage{max-width:760px;}
+  .lightbox-caption{max-width:760px; font-size:14px;}
+  .results-modal-card{max-width:620px;}
+  .announce-box{max-width:min(560px,100%);}
+}
+
+/* ---------- Tablet besar / desktop kecil (>=1100px) ---------- */
+@media(min-width:1100px){
+  main{max-width:1040px;}
+  header{padding-left:max(24px,calc((100vw - 1040px)/2)); padding-right:max(24px,calc((100vw - 1040px)/2));}
+  .bottom-nav{max-width:1040px;}
+  #lanes{grid-template-columns:1fr 1fr 1fr;}
+  #schedule.active{grid-template-columns:1fr 1fr 1fr;}
+  .gallery-grid, .fr-results-grid{grid-template-columns:repeat(4,1fr);}
+}
+
 /* ===== DARK MODE ===== */
 .theme-toggle{
   background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.16);
@@ -966,11 +1016,11 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       </div>
     </div>
 
-    <div class="game-card" data-date="2026-12-12">
+    <div class="game-card" data-tba="true"> <!-- Tarikh belum ditetapkan: letak data-date="YYYY-MM-DD" bila sudah tahu -->
       <div class="game-head">
         <div class="game-no">5</div>
         <p class="game-name">Pickleball</p>
-        <span class="game-date">12 Dis</span>
+        <span class="game-date">TBA</span>
         <span class="status-badge"></span>
       </div>
       <div class="game-details">
@@ -1009,7 +1059,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       <p class="fr-progress-dates-mini"><span>22 Ogos</span><span>31 Dis</span></p>
     </div>
 
-    <div class="task-card">
+    <div class="task-card task-wide">
       <div class="task-head">
         <div class="task-no">1</div>
         <p class="task-name">One Team, One Frame</p>
@@ -1078,11 +1128,13 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     <div class="task-card mystery">
       <div class="task-head">
         <div class="task-no">5</div>
-        <p class="task-name">The Unknown (Coming in October)</p>
+        <p class="task-name">Speed Game Challenge</p>
+        <span class="game-date" title="Sebelum 12:00 tengah malam, 28 November 2026 (hari acara CSR)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>28 Nov</span>
       </div>
-      <video class="mystery-video" autoplay muted loop playsinline>
-        <source src="task5-teaser.mp4" type="video/mp4">
+      <video class="mystery-video" id="speed-video" autoplay muted loop playsinline>
+        <source src="speed-game-teaser.mp4" type="video/mp4">
       </video>
+      <div class="speed-link" id="speed-link" hidden></div>
     </div>
 
     </div>
@@ -1607,6 +1659,42 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     el.addEventListener('click', next);
     document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !el.hidden) next(); });
     showCurrent();
+  })();
+
+  // ---------- Speed Game Challenge: link dibuka pada masa tertentu ----------
+  (function speedGameLink(){
+    var el = document.getElementById('speed-link');
+    if(!el) return;
+    var OPEN_AT = new Date('2026-11-28T08:00:00'); // 28 Nov 2026, 8:00 pagi
+    var GAME_URL = 'https://revil007.github.io/Game-Chain-Q1/'; // link permainan
+    var clock = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>';
+    var arrow = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+    var video = document.getElementById('speed-video');
+    var lastState = '';
+    function update(){
+      var open = new Date() >= OPEN_AT;
+      var state = open ? 'open' : 'wait';
+      if(state === lastState) return;
+      lastState = state;
+      if(!open){
+        // Sebelum 28 Nov 8:00 pagi: video sahaja, tiada butang
+        el.hidden = true;
+        if(video) video.style.display = '';
+      } else {
+        // Selepas: video hilang, diganti butang link
+        if(video){ video.pause(); video.style.display = 'none'; }
+        el.hidden = false;
+        if(GAME_URL){
+          el.className = 'speed-link open';
+          el.innerHTML = '<a href="' + GAME_URL + '" target="_blank" rel="noopener">Main sekarang ' + arrow + '</a>';
+        } else {
+          el.className = 'speed-link';
+          el.innerHTML = clock + 'Link akan dikongsi sebentar lagi';
+        }
+      }
+    }
+    update();
+    setInterval(update, 1000); // bertukar sendiri tepat jam 8:00 tanpa refresh
   })();
 
   // ---------- Live leaderboard from Google Sheet (JSONP — works from file:// and https://) ----------
@@ -2153,7 +2241,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     { link: 'task1-inspo-2.jpg', caption: 'Badminton · Tarikh akhir: 20 Sep 2026' },
     { link: 'task1-inspo-3.jpg', caption: 'Futsal & Netball · Tarikh akhir: 18 Okt 2026' },
     { link: 'task1-inspo-4.jpg', caption: 'Bowling · Tarikh akhir: 21 Nov 2026' },
-    { link: 'task1-inspo-1.jpg', caption: 'Pickleball · Tarikh akhir: 12 Dis 2026' }
+    { link: 'task1-inspo-1.jpg', caption: 'Pickleball · Tarikh akhir: TBA' }
   ];
 
   function closeLightbox(){
