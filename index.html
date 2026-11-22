@@ -724,7 +724,7 @@ main{max-width:500px;padding:20px 16px 96px;}
 .leader-meta{font-size:10.5px;color:#C2CBD5;margin-top:6px;}
 .leader-meta #current-points{font-family:'JetBrains Mono',monospace;color:#F4B52A;font-weight:700;}
 .leader-rank{color:var(--amber);opacity:.95;flex-shrink:0;position:absolute;right:12px;top:50%;transform:translateY(-50%);}
-.leader-rank video{width:64px;height:64px;display:block;filter:drop-shadow(0 3px 10px rgba(244,181,42,.45));}
+.leader-rank video, .leader-rank img{width:64px;height:64px;display:block;filter:drop-shadow(0 3px 10px rgba(244,181,42,.45));}
 .lane{border-left:3px solid var(--team);border-radius:12px;padding:13px 14px;margin-bottom:7px;box-shadow:none;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
 .lane.rank-1{background:linear-gradient(90deg,#FFF8E8 0%,#fff 65%);border-top-color:#F0E4C7;border-right-color:#F0E4C7;border-bottom-color:#F0E4C7;}
 .lane.rank-2{background:linear-gradient(90deg,#F2F4F5 0%,#fff 65%);border-top-color:#DEE2E5;border-right-color:#DEE2E5;border-bottom-color:#DEE2E5;}
@@ -1695,6 +1695,22 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     }
     update();
     setInterval(update, 1000); // bertukar sendiri tepat jam 8:00 tanpa refresh
+  })();
+
+  // ---------- iPhone/Safari: WebM berlatar lutsinar tak disokong, guna animasi WebP ----------
+  (function transparentFallback(){
+    var ua = navigator.userAgent;
+    var isApple = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) ||
+                  (/Safari/.test(ua) && !/Chrome|Chromium|CriOS|FxiOS|Android/.test(ua));
+    if(!isApple) return;
+    function swap(video, src){
+      if(!video) return;
+      var img = document.createElement('img');
+      img.src = src; img.alt = ''; img.className = video.className; img.decoding = 'async';
+      video.parentNode.replaceChild(img, video);
+    }
+    swap(document.querySelector('video.brand-mark'), 'logo-header.webp');
+    swap(document.querySelector('.leader-rank video'), 'trophy-3d.webp');
   })();
 
   // ---------- Live leaderboard from Google Sheet (JSONP — works from file:// and https://) ----------
