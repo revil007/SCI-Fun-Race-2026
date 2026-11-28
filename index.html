@@ -261,6 +261,8 @@
     color:var(--coral-ink); background:rgba(255,90,60,0.1);
     padding:3px 9px; border-radius:20px; flex-shrink:0;
   }
+  .game-date.task-done{color:#4F7658; background:#E5EEE7;}
+  html[data-theme="dark"] .game-date.task-done{color:#8FCF9F; background:rgba(91,135,101,.16);}
   .status-badge{
     display:inline-flex; align-items:center; gap:4px;
     width:auto; order:initial; margin-top:0;
@@ -364,11 +366,6 @@
   .task-card.mystery .task-head{position:relative; justify-content:flex-start; gap:8px; margin-bottom:14px;}
   .task-card.mystery .task-name{color:var(--cream); flex:0 1 auto;}
   .task-card.mystery .game-date{margin-left:auto; color:#F4B52A; background:rgba(244,181,42,0.14); border:1px solid rgba(244,181,42,0.35);}
-  .speed-link[hidden]{display:none;}
-  .speed-link{margin-top:12px; padding:11px 14px; border-radius:10px; background:rgba(244,181,42,0.10); border:1px solid rgba(244,181,42,0.30); color:#F4B52A; font-size:13px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px; text-align:center;}
-  .speed-link a{color:#F4B52A; text-decoration:none; display:flex; align-items:center; gap:8px; width:100%; justify-content:center;}
-  .speed-link.open{background:#F4B52A; border-color:#F4B52A;}
-  .speed-link.open a{color:#132A4C; font-weight:700;}
   .mystery-video{
     width:100%; display:block; border-radius:10px;
     margin-bottom:0; position:relative;
@@ -1096,7 +1093,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       <div class="task-head">
         <div class="task-no">2</div>
         <p class="task-name">CSR Challenge</p>
-        <span class="game-date" title="Sebelum 12:00 tengah malam, 28 November 2026 (hari acara CSR)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>28 Nov</span>
+        <span class="game-date task-done" title="Acara CSR, 28 November 2026"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Selesai</span>
       </div>
       <div class="task-body">
         <div class="detail-row"><span class="label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px; margin-right:3px;"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.5 4.5"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L12.5 19.5"/></svg>Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
@@ -1123,18 +1120,6 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
       <div class="task-body">
         <div class="detail-row"><span class="label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px; margin-right:3px;"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11.5 4.5"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L12.5 19.5"/></svg>Link</span><span class="value"><a href="https://forms.gle/3wh1sUR6CRSmP2qJ8" target="_blank" rel="noopener">Hantar tugasan ↗</a></span></div>
       </div>
-    </div>
-
-    <div class="task-card mystery">
-      <div class="task-head">
-        <div class="task-no">5</div>
-        <p class="task-name">Speed Game Challenge</p>
-        <span class="game-date" title="Sebelum 12:00 tengah malam, 28 November 2026 (hari acara CSR)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>28 Nov</span>
-      </div>
-      <video class="mystery-video" id="speed-video" autoplay muted loop playsinline>
-        <source src="speed-game-teaser.mp4" type="video/mp4">
-      </video>
-      <div class="speed-link" id="speed-link" hidden></div>
     </div>
 
     </div>
@@ -1631,8 +1616,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     var hint = document.getElementById('announce-hint');
     // Tambah poster baru di sini. "until" = selepas masa ni poster tak keluar lagi.
     var ANNOUNCEMENTS = [
-      { key:'announce-bowling-2026', src:'announce-bowling.jpg', alt:'Makluman acara sukan Bowling, 21 November 2026', until:'2026-11-21T15:00:00' },
-      { key:'announce-csr-2026',     src:'announce-csr-programme-v3.jpg', alt:'Atur cara CSR Environment Clean-up, 28 November 2026, Taman Awam Teluk Likas', until:'2026-11-28T23:59:00' }
+      { key:'announce-bowling-2026', src:'announce-bowling.jpg', alt:'Makluman acara sukan Bowling, 21 November 2026', until:'2026-11-21T15:00:00' }
     ];
     var now = new Date();
     var queue = ANNOUNCEMENTS.filter(function(a){
@@ -1659,42 +1643,6 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
     el.addEventListener('click', next);
     document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !el.hidden) next(); });
     showCurrent();
-  })();
-
-  // ---------- Speed Game Challenge: link dibuka pada masa tertentu ----------
-  (function speedGameLink(){
-    var el = document.getElementById('speed-link');
-    if(!el) return;
-    var OPEN_AT = new Date('2026-11-28T08:00:00'); // 28 Nov 2026, 8:00 pagi
-    var GAME_URL = 'https://revil007.github.io/Game-Chain-Q1/'; // link permainan
-    var clock = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>';
-    var arrow = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17 17 7M8 7h9v9"/></svg>';
-    var video = document.getElementById('speed-video');
-    var lastState = '';
-    function update(){
-      var open = new Date() >= OPEN_AT;
-      var state = open ? 'open' : 'wait';
-      if(state === lastState) return;
-      lastState = state;
-      if(!open){
-        // Sebelum 28 Nov 8:00 pagi: video sahaja, tiada butang
-        el.hidden = true;
-        if(video) video.style.display = '';
-      } else {
-        // Selepas: video hilang, diganti butang link
-        if(video){ video.pause(); video.style.display = 'none'; }
-        el.hidden = false;
-        if(GAME_URL){
-          el.className = 'speed-link open';
-          el.innerHTML = '<a href="' + GAME_URL + '" target="_blank" rel="noopener">Main sekarang ' + arrow + '</a>';
-        } else {
-          el.className = 'speed-link';
-          el.innerHTML = clock + 'Link akan dikongsi sebentar lagi';
-        }
-      }
-    }
-    update();
-    setInterval(update, 1000); // bertukar sendiri tepat jam 8:00 tanpa refresh
   })();
 
   // ---------- iPhone/Safari: WebM berlatar lutsinar tak disokong, guna animasi WebP ----------
@@ -1954,7 +1902,7 @@ html[data-theme="dark"] .results-modal-body table{color:var(--ink);}
   (function(){ var b=document.getElementById('gallery-upload-btn'); if(b && GALLERY_UPLOAD_FORM_URL){ b.href=GALLERY_UPLOAD_FORM_URL; b.hidden=false; } })();
   var GALLERY_FORM_SHEET_ID = '1vBkPyVfoZANDCvD_9jUkCdtlLFSBLQHOcmIc5tXKLJs';
   var GALLERY_FORM_GID = '1662262716';
-  var GAME_LIST = ['Volleyball', 'Badminton', 'Futsal & Netball', 'Bowling', 'Pickleball'];
+  var GAME_LIST = ['Volleyball', 'Badminton', 'Futsal & Netball', 'Bowling', 'Pickleball', 'CSR'];
   var galleryGroups = {};
   var gallerySourcesPending = 2;
 
